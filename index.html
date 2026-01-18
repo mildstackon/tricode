@@ -1,0 +1,2835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TriCode - Learn Python, Java & JavaScript | Free Interactive Coding Lessons</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Learn Python, Java, and JavaScript from beginner to professional with TriCode. Free interactive coding lessons with a real code editor, instant feedback, and hands-on projects.">
+    <meta name="keywords" content="learn programming, python tutorial, javascript tutorial, java tutorial, coding lessons, free coding course, interactive programming, learn to code">
+    <meta name="author" content="TriCode">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://mildstackon.github.io/tricode/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mildstackon.github.io/tricode/">
+    <meta property="og:title" content="TriCode - Learn Python, Java & JavaScript">
+    <meta property="og:description" content="Master programming with 60+ interactive lessons. Learn Python, Java, and JavaScript from beginner to professional - completely free!">
+    <meta property="og:image" content="https://mildstackon.github.io/tricode/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="TriCode">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://mildstackon.github.io/tricode/">
+    <meta name="twitter:title" content="TriCode - Learn Python, Java & JavaScript">
+    <meta name="twitter:description" content="Master programming with 60+ interactive lessons. Learn Python, Java, and JavaScript from beginner to professional - completely free!">
+    <meta name="twitter:image" content="https://mildstackon.github.io/tricode/og.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2L2 7L12 12L22 7L12 2Z' fill='%233B82F6'/><path d='M2 17L12 22L22 17' stroke='%233B82F6' stroke-width='2'/><path d='M2 12L12 17L22 12' stroke='%2360A5FA' stroke-width='2'/></svg>">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "TriCode",
+        "description": "Learn Python, Java, and JavaScript from beginner to professional with interactive coding lessons",
+        "url": "https://mildstackon.github.io/tricode/",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "TriCode"
+        }
+    }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+        
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .dark ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+        
+        .light ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        
+        /* Smooth transitions for theme switching */
+        .theme-transition {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        /* Page transition animations */
+        .page-enter {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+        
+        .page-enter-active {
+            opacity: 1;
+            transform: translateX(0);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .page-exit {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .page-exit-active {
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        /* Slide animations */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .animate-slide-in {
+            animation: slideIn 0.3s ease forwards;
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease forwards;
+        }
+        
+        /* Error line decoration */
+        .error-line-decoration {
+            background-color: rgba(239, 68, 68, 0.3) !important;
+            border-left: 3px solid #ef4444 !important;
+        }
+        
+        /* Progress bar animation */
+        .progress-fill {
+            transition: width 0.5s ease;
+        }
+        
+        /* Glow effect for buttons */
+        .glow-effect {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+        
+        /* Lock icon pulse */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Monaco editor container */
+        #monaco-editor {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* File tree styles */
+        .file-tree-item:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+        
+        .file-tree-item.active {
+            background-color: rgba(59, 130, 246, 0.2);
+        }
+        
+        /* Share & Copy Button Styles */
+        .share-btn, .copy-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .share-btn:hover, .copy-btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        .copy-btn.copied {
+            background-color: #10b981 !important;
+        }
+        
+        /* Quiz Component Styles */
+        .quiz-container {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .quiz-option {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .quiz-option:hover:not(.selected):not(.correct):not(.incorrect) {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-color: #3b82f6;
+        }
+        
+        .quiz-option.selected {
+            background-color: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+        }
+        
+        .quiz-option.correct {
+            background-color: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+        }
+        
+        .quiz-option.incorrect {
+            background-color: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+        }
+        
+        /* Lesson Navigation */
+        .lesson-nav-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .lesson-nav-btn:hover:not(:disabled) {
+            transform: translateX(2px);
+        }
+        
+        .lesson-nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Mark Complete Button */
+        .mark-complete-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .mark-complete-btn.completed {
+            background-color: #10b981;
+        }
+        
+        /* Toast Animations */
+        @keyframes toastSlideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .toast-animate {
+            animation: toastSlideIn 0.3s ease forwards;
+        }
+        
+        /* Copy notification */
+        .copy-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #10b981;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            z-index: 9999;
+            animation: fadeInOut 2s ease forwards;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            85% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        }
+    </style>
+</head>
+<body class="dark">
+    <div id="app" class="h-screen flex flex-col theme-transition bg-gray-900 text-gray-100">
+        
+        <!-- Window Title Bar (Electron-style) -->
+        <div class="window-titlebar flex items-center justify-between px-4 py-2 theme-transition bg-gray-950 border-b border-gray-800">
+            <div class="flex items-center gap-3">
+                <!-- App Logo -->
+                <div class="flex items-center gap-2">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="#3B82F6"/>
+                        <path d="M2 17L12 22L22 17" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 12L12 17L22 12" stroke="#60A5FA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="font-semibold text-lg">TriCode</span>
+                </div>
+                <!-- Window Controls (Mac-style for aesthetics) -->
+                <div class="flex gap-2 ml-4">
+                    <div class="w-3 h-3 rounded-full bg-red-500 hover:bg-red-400 cursor-pointer"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-400 cursor-pointer"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500 hover:bg-green-400 cursor-pointer"></div>
+                </div>
+            </div>
+            
+            <!-- Theme Toggle -->
+            <button id="theme-toggle" class="flex items-center gap-2 px-3 py-1.5 rounded-lg theme-transition bg-gray-800 hover:bg-gray-700 border border-gray-700">
+                <svg id="moon-icon" class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                </svg>
+                <svg id="sun-icon" class="w-5 h-5 text-yellow-500 hidden" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
+                </svg>
+                <span class="text-sm font-medium">Dark</span>
+            </button>
+        </div>
+        
+        <!-- Main Navigation Tabs -->
+        <div class="nav-tabs flex items-center gap-1 px-4 py-2 theme-transition bg-gray-900 border-b border-gray-800">
+            <button class="nav-tab active flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200" data-tab="learn">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                </svg>
+                Learn
+            </button>
+            <button class="nav-tab flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200" data-tab="projects">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                </svg>
+                Projects
+            </button>
+            <button class="nav-tab flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200" data-tab="progress">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                Progress
+            </button>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div id="main-content" class="flex-1 overflow-hidden">
+            
+            <!-- Learn Tab Content -->
+            <div id="learn-tab" class="tab-content h-full flex">
+                
+                <!-- Language Selector Sidebar -->
+                <div class="language-sidebar w-64 flex-shrink-0 theme-transition bg-gray-850 border-r border-gray-800 p-4 overflow-y-auto" style="background-color: rgba(17, 24, 39, 0.5);">
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mb-4">Select Language</h3>
+                    
+                    <div class="space-y-2">
+                        <!-- Python -->
+                        <button class="language-btn active w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200" data-lang="python">
+                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-yellow-500 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09z"/>
+                                </svg>
+                            </div>
+                            <div class="text-left">
+                                <div class="font-semibold">Python</div>
+                                <div class="text-xs text-gray-400">Beginner Friendly</div>
+                            </div>
+                        </button>
+                        
+                        <!-- JavaScript -->
+                        <button class="language-btn w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200" data-lang="javascript">
+                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center">
+                                <span class="text-black font-bold text-lg">JS</span>
+                            </div>
+                            <div class="text-left">
+                                <div class="font-semibold">JavaScript</div>
+                                <div class="text-xs text-gray-400">Web Development</div>
+                            </div>
+                        </button>
+                        
+                        <!-- Java -->
+                        <button class="language-btn w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200" data-lang="java">
+                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M8.851 18.56s-.917.534.653.714c1.902.218 2.874.187 4.969-.211 0 0 .552.346 1.321.646-4.699 2.013-10.633-.118-6.943-1.149M8.276 15.933s-1.028.761.542.924c2.032.209 3.636.227 6.413-.308 0 0 .384.389.987.602-5.679 1.661-12.007.13-7.942-1.218M13.116 11.475c1.158 1.333-.304 2.533-.304 2.533s2.939-1.518 1.589-3.418c-1.261-1.772-2.228-2.652 3.007-5.688 0-.001-8.216 2.051-4.292 6.573"/>
+                                </svg>
+                            </div>
+                            <div class="text-left">
+                                <div class="font-semibold">Java</div>
+                                <div class="text-xs text-gray-400">Enterprise Ready</div>
+                            </div>
+                        </button>
+                    </div>
+                    
+                    <!-- Lessons List -->
+                    <h3 class="text-sm font-semibold uppercase tracking-wider text-gray-400 mt-8 mb-4">Lessons</h3>
+                    <div id="lessons-list" class="space-y-2">
+                        <!-- Lessons will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Editor Area -->
+                <div class="editor-area flex-1 flex flex-col overflow-hidden">
+                    
+                    <!-- Lesson Header -->
+                    <div class="lesson-header px-6 py-4 theme-transition bg-gray-900 border-b border-gray-800">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <!-- Previous Lesson Button -->
+                                <button id="prev-lesson-btn" class="lesson-nav-btn p-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-all duration-200" title="Previous Lesson">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                                    </svg>
+                                </button>
+                                <div>
+                                    <h1 id="lesson-title" class="text-xl font-bold">Variables & Data Types</h1>
+                                    <p id="lesson-description" class="text-sm text-gray-400 mt-1">Learn how to store and use data in Python</p>
+                                </div>
+                                <!-- Next Lesson Button -->
+                                <button id="next-lesson-btn" class="lesson-nav-btn p-2 rounded-lg bg-gray-700 hover:bg-gray-600 transition-all duration-200" title="Next Lesson">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <!-- Share Button -->
+                                <button id="share-btn" class="share-btn flex items-center gap-1 px-2 py-1.5 bg-gray-700 hover:bg-gray-600 rounded text-sm transition-all duration-200" title="Share this lesson">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                                    </svg>
+                                    <span class="hidden sm:inline text-xs">Share</span>
+                                </button>
+                                <!-- Copy Link Button -->
+                                <button id="copy-link-btn" class="copy-btn flex items-center gap-1 px-2 py-1.5 bg-gray-700 hover:bg-gray-600 rounded text-sm transition-all duration-200" title="Copy lesson link">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                                    </svg>
+                                    <span class="hidden sm:inline text-xs">Copy</span>
+                                </button>
+                                <!-- Mark Complete Button -->
+                                <button id="mark-complete-btn" class="mark-complete-btn flex items-center gap-1 px-2 py-1.5 bg-gray-700 hover:bg-gray-600 rounded text-sm transition-all duration-200" title="Mark as complete">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    <span class="hidden sm:inline text-xs" id="complete-btn-text">Done</span>
+                                </button>
+                                <div class="w-px h-5 bg-gray-600 mx-0.5"></div>
+                                <button id="hints-btn" class="flex items-center gap-2 px-3 py-2 bg-yellow-600 hover:bg-yellow-500 rounded-lg font-medium transition-all duration-200">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                    </svg>
+                                    <span class="hidden sm:inline">Hints</span>
+                                </button>
+                                <button id="run-code-btn" class="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-500 rounded-lg font-medium transition-all duration-200">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span class="hidden sm:inline">Run</span>
+                                </button>
+                                <button id="submit-btn" class="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg font-medium transition-all duration-200">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span class="hidden sm:inline">Submit</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Instructions Panel -->
+                    <div id="instructions-panel" class="px-6 py-4 theme-transition bg-gray-850 border-b border-gray-800" style="background-color: rgba(17, 24, 39, 0.3);">
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-1">Task</h4>
+                                <p id="task-description" class="text-sm text-gray-300">Create a variable called <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">name</code> and assign your name to it. Then create a variable called <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">age</code> with your age as a number.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Code Editor -->
+                    <div class="flex-1 flex flex-col overflow-hidden">
+                        <div id="monaco-editor" class="flex-1"></div>
+                        
+                        <!-- Output Console -->
+                        <div class="output-console h-32 theme-transition bg-gray-950 border-t border-gray-800">
+                            <div class="flex items-center justify-between px-4 py-2 border-b border-gray-800">
+                                <span class="text-sm font-medium text-gray-400">Output</span>
+                                <button id="clear-output" class="text-xs text-gray-500 hover:text-gray-300">Clear</button>
+                            </div>
+                            <div id="output-content" class="p-4 overflow-y-auto h-20 code-font text-sm">
+                                <span class="text-gray-500">// Run your code to see output here</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Projects Tab Content -->
+            <div id="projects-tab" class="tab-content h-full hidden">
+                <div class="h-full flex">
+                    <!-- Project File Tree -->
+                    <div class="w-64 flex-shrink-0 theme-transition bg-gray-850 border-r border-gray-800 flex flex-col" style="background-color: rgba(17, 24, 39, 0.5);">
+                        <div class="p-4 border-b border-gray-800">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-sm font-semibold uppercase tracking-wider text-gray-400">Explorer</h3>
+                                <div class="flex gap-1">
+                                    <button id="new-file-btn" class="p-1.5 rounded hover:bg-gray-700 transition-colors" title="New File">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                        </svg>
+                                    </button>
+                                    <button id="new-folder-btn" class="p-1.5 rounded hover:bg-gray-700 transition-colors" title="New Folder">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <button id="new-project-btn" class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm font-medium transition-all duration-200">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                                New Project
+                            </button>
+                        </div>
+                        
+                        <!-- File Tree -->
+                        <div id="file-tree" class="flex-1 p-2 overflow-y-auto">
+                            <div class="text-sm text-gray-500 text-center py-8">
+                                No project open.<br>Create a new project to get started.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Project Editor Area -->
+                    <div class="flex-1 flex flex-col">
+                        <!-- Open Tabs -->
+                        <div id="project-tabs" class="flex items-center gap-1 px-2 py-1 theme-transition bg-gray-900 border-b border-gray-800 overflow-x-auto">
+                            <div class="text-sm text-gray-500 px-4 py-2">No files open</div>
+                        </div>
+                        
+                        <!-- Project Monaco Editor -->
+                        <div id="project-editor" class="flex-1 flex items-center justify-center theme-transition bg-gray-900">
+                            <div class="text-center">
+                                <svg class="w-16 h-16 mx-auto text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                                <p class="text-gray-500">Select a file to start editing</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Progress Tab Content -->
+            <div id="progress-tab" class="tab-content h-full hidden overflow-y-auto">
+                <div class="max-w-4xl mx-auto p-8">
+                    <h2 class="text-2xl font-bold mb-6">Your Learning Progress</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <!-- Python Progress Card -->
+                        <div class="theme-transition bg-gray-800 rounded-2xl p-6 border border-gray-700">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-yellow-500 flex items-center justify-center">
+                                    <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg">Python</h3>
+                                    <p class="text-sm text-gray-400" id="python-lessons-count">0/20 Lessons</p>
+                                </div>
+                            </div>
+                            <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div id="python-progress-bar" class="h-full bg-gradient-to-r from-blue-500 to-yellow-500 progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- JavaScript Progress Card -->
+                        <div class="theme-transition bg-gray-800 rounded-2xl p-6 border border-gray-700">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center">
+                                    <span class="text-black font-bold text-xl">JS</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg">JavaScript</h3>
+                                    <p class="text-sm text-gray-400" id="javascript-lessons-count">0/20 Lessons</p>
+                                </div>
+                            </div>
+                            <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div id="javascript-progress-bar" class="h-full bg-gradient-to-r from-yellow-400 to-yellow-600 progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Java Progress Card -->
+                        <div class="theme-transition bg-gray-800 rounded-2xl p-6 border border-gray-700">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center">
+                                    <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M8.851 18.56s-.917.534.653.714c1.902.218 2.874.187 4.969-.211 0 0 .552.346 1.321.646-4.699 2.013-10.633-.118-6.943-1.149"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-lg">Java</h3>
+                                    <p class="text-sm text-gray-400" id="java-lessons-count">0/20 Lessons</p>
+                                </div>
+                            </div>
+                            <div class="w-full h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div id="java-progress-bar" class="h-full bg-gradient-to-r from-red-500 to-orange-500 progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Achievements -->
+                    <h3 class="text-xl font-bold mb-4">Achievements</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="theme-transition bg-gray-800 rounded-xl p-4 border border-gray-700 text-center">
+                            <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                            </div>
+                            <h4 class="font-semibold text-sm">First Steps</h4>
+                            <p class="text-xs text-gray-400">Complete your first lesson</p>
+                        </div>
+                        <div class="theme-transition bg-gray-800 rounded-xl p-4 border border-gray-700 text-center opacity-50">
+                            <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-gray-600 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                </svg>
+                            </div>
+                            <h4 class="font-semibold text-sm">Bug Squasher</h4>
+                            <p class="text-xs text-gray-400">Fix 10 errors</p>
+                        </div>
+                        <div class="theme-transition bg-gray-800 rounded-xl p-4 border border-gray-700 text-center opacity-50">
+                            <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-gray-600 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                </svg>
+                            </div>
+                            <h4 class="font-semibold text-sm">Polyglot</h4>
+                            <p class="text-xs text-gray-400">Learn all 3 languages</p>
+                        </div>
+                        <div class="theme-transition bg-gray-800 rounded-xl p-4 border border-gray-700 text-center opacity-50">
+                            <div class="w-12 h-12 mx-auto mb-2 rounded-full bg-gray-600 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                </svg>
+                            </div>
+                            <h4 class="font-semibold text-sm">Project Master</h4>
+                            <p class="text-xs text-gray-400">Create 5 projects</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- New Project Modal -->
+        <div id="new-project-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
+            <div class="theme-transition bg-gray-800 rounded-2xl p-6 w-96 border border-gray-700 animate-slide-in">
+                <h3 class="text-xl font-bold mb-4">Create New Project</h3>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Project Name</label>
+                    <input type="text" id="project-name-input" class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:border-blue-500 focus:outline-none" placeholder="my-awesome-project">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Language</label>
+                    <select id="project-lang-select" class="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 focus:border-blue-500 focus:outline-none">
+                        <option value="python">Python</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="java">Java</option>
+                    </select>
+                </div>
+                <div class="flex gap-3">
+                    <button id="cancel-project-btn" class="flex-1 px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 font-medium transition-colors">Cancel</button>
+                    <button id="create-project-btn" class="flex-1 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 font-medium transition-colors">Create</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Hints Modal -->
+        <div id="hints-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
+            <div class="theme-transition bg-gray-800 rounded-2xl p-6 w-[500px] max-w-[90vw] border border-gray-700 animate-slide-in max-h-[80vh] overflow-hidden flex flex-col">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-yellow-600 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold">Hints</h3>
+                    </div>
+                    <button id="close-hints-btn" class="p-2 rounded-lg hover:bg-gray-700 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                <div id="hints-content" class="flex-1 overflow-y-auto space-y-3">
+                    <!-- Hints will be populated here -->
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-700">
+                    <button id="close-hints-btn-bottom" class="w-full px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 font-medium transition-colors">Got it!</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Success Toast -->
+        <div id="success-toast" class="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg hidden animate-slide-in flex items-center gap-3">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span id="toast-message">Lesson completed! Next lesson unlocked.</span>
+        </div>
+        
+        <!-- Share Modal -->
+        <div id="share-modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
+            <div class="theme-transition bg-gray-800 rounded-2xl p-6 w-96 max-w-[90vw] border border-gray-700 animate-slide-in">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-bold">Share This Lesson</h3>
+                    <button id="close-share-btn" class="p-2 rounded-lg hover:bg-gray-700 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                <p class="text-sm text-gray-400 mb-4" id="share-lesson-title">Variables & Data Types - Python</p>
+                
+                <!-- Share URL -->
+                <div class="flex gap-2 mb-4">
+                    <input type="text" id="share-url-input" class="flex-1 px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-sm" readonly>
+                    <button id="copy-share-url" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg font-medium transition-colors">
+                        Copy
+                    </button>
+                </div>
+                
+                <!-- Share Buttons -->
+                <div class="grid grid-cols-2 gap-2">
+                    <button id="share-twitter" class="flex items-center justify-center gap-2 px-3 py-2 bg-[#000000] hover:bg-[#333] rounded-lg text-sm font-medium transition-colors">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                        X / Twitter
+                    </button>
+                    <button id="share-linkedin" class="flex items-center justify-center gap-2 px-3 py-2 bg-[#0A66C2] hover:bg-[#094d92] rounded-lg text-sm font-medium transition-colors">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                        LinkedIn
+                    </button>
+                    <button id="share-facebook" class="flex items-center justify-center gap-2 px-3 py-2 bg-[#1877F2] hover:bg-[#166fe5] rounded-lg text-sm font-medium transition-colors">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        Facebook
+                    </button>
+                    <button id="share-whatsapp" class="flex items-center justify-center gap-2 px-3 py-2 bg-[#25D366] hover:bg-[#20bd5a] rounded-lg text-sm font-medium transition-colors">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                        </svg>
+                        WhatsApp
+                    </button>
+                    <button id="share-reddit" class="flex items-center justify-center gap-2 px-3 py-2 bg-[#FF4500] hover:bg-[#e63e00] rounded-lg text-sm font-medium transition-colors">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/>
+                        </svg>
+                        Reddit
+                    </button>
+                    <button id="share-email" class="flex items-center justify-center gap-2 px-3 py-2 bg-[#6B7280] hover:bg-[#5a6270] rounded-lg text-sm font-medium transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        Email
+                    </button>
+                </div>
+                
+                <!-- Copy for TikTok/YouTube -->
+                <div class="mt-4 pt-4 border-t border-gray-700">
+                    <p class="text-xs text-gray-400 mb-2 text-center">For TikTok, YouTube, or other platforms:</p>
+                    <button id="copy-share-text" class="w-full flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 rounded-lg text-sm font-medium transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+                        </svg>
+                        Copy Caption + Link
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Giscus Comments Placeholder (Enable when ready) -->
+        <!--
+        <div id="giscus-comments" class="hidden">
+            <script src="https://giscus.app/client.js"
+                data-repo="YOUR_GITHUB_USERNAME/YOUR_REPO_NAME"
+                data-repo-id="YOUR_REPO_ID"
+                data-category="Comments"
+                data-category-id="YOUR_CATEGORY_ID"
+                data-mapping="pathname"
+                data-strict="0"
+                data-reactions-enabled="1"
+                data-emit-metadata="0"
+                data-input-position="top"
+                data-theme="dark"
+                data-lang="en"
+                data-loading="lazy"
+                crossorigin="anonymous"
+                async>
+            </script>
+        </div>
+        
+        To enable Giscus comments:
+        1. Go to https://giscus.app
+        2. Configure with your GitHub repo
+        3. Replace the placeholder values above:
+           - YOUR_GITHUB_USERNAME/YOUR_REPO_NAME
+           - YOUR_REPO_ID
+           - YOUR_CATEGORY_ID
+        4. Uncomment the script and add it where you want comments to appear
+        -->
+    </div>
+
+    <script>
+        // ============================================
+        // CURRICULUM DATA - PYTHON (pythonCurriculum.js)
+        // Beginner to Professional: 20 Lessons
+        // ============================================
+        const pythonCurriculum = [
+            {
+                id: 'py-1',
+                title: 'Variables & Data Types',
+                description: 'Learn how to store and use data in Python',
+                task: 'Create a variable called <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">name</code> and assign your name to it (as a string). Then create a variable called <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">age</code> with a number.',
+                starterCode: '# Python uses simple variable assignment\n# Strings use quotes, numbers don\'t\n\n# Create your variables below:\nname = ""\nage = 0',
+                solution: /name\s*=\s*["'].+["']\s*\n.*age\s*=\s*\d+/,
+                hints: ['Variables in Python are created with: variable_name = value', 'Strings need quotes around them like "John"', 'Numbers don\'t need quotes: age = 25']
+            },
+            {
+                id: 'py-2',
+                title: 'Print Statements & Output',
+                description: 'Display output to the console',
+                task: 'Use the <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">print()</code> function to display "Hello, World!" to the console.',
+                starterCode: '# The print() function displays text to the console\n# Text must be wrapped in quotes\n\n# Print Hello, World! below:\nprint("")',
+                solution: /print\s*\(\s*["']Hello,?\s*World!?["']\s*\)/i,
+                hints: ['Use print() with text inside the parentheses', 'The text needs to be in quotes: "Hello, World!"', 'Make sure to match the exact text requested']
+            },
+            {
+                id: 'py-3',
+                title: 'Indentation & Code Structure',
+                description: 'Understand Python\'s unique indentation rules',
+                task: 'Create an if statement that checks if <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">x</code> is greater than 5, and if true, print "Big number". Make sure to use proper indentation.',
+                starterCode: '# Python uses indentation (4 spaces) to define code blocks\n# No curly braces needed!\n\nx = 10\n\n# Write your if statement with proper indentation:\nif x > 5:\n    print("")',
+                solution: /if\s+x\s*>\s*5\s*:\s*\n\s{4}print\s*\(\s*["']Big number["']\s*\)/,
+                hints: ['Python uses indentation instead of curly braces', 'Use 4 spaces for each indentation level', 'The colon : is required after the condition']
+            },
+            {
+                id: 'py-4',
+                title: 'If/Else Statements',
+                description: 'Make decisions in your code with conditionals',
+                task: 'Write an if/else statement that checks if <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">score</code> is >= 60. Print "Pass" if true, otherwise print "Fail".',
+                starterCode: '# If/else lets you handle both conditions\n\nscore = 75\n\n# Write your if/else statement:\nif score >= 60:\n    print("")\nelse:\n    print("")',
+                solution: /if\s+score\s*>=\s*60\s*:\s*\n\s+print\s*\(\s*["']Pass["']\s*\)\s*\n\s*else\s*:\s*\n\s+print\s*\(\s*["']Fail["']\s*\)/,
+                hints: ['Use if condition: for the first check', 'Use else: for the alternative case', 'Both print statements need proper indentation']
+            },
+            {
+                id: 'py-5',
+                title: 'Elif - Multiple Conditions',
+                description: 'Handle multiple conditions with elif',
+                task: 'Create a grading system: if score >= 90 print "A", elif >= 80 print "B", elif >= 70 print "C", else print "F".',
+                starterCode: '# Use elif for multiple conditions\n\nscore = 85\n\n# Create the grading system:\nif score >= 90:\n    print("A")\nelif score >= 80:\n    print("")\nelif score >= 70:\n    print("")\nelse:\n    print("")',
+                solution: /if\s+score\s*>=\s*90[\s\S]*elif\s+score\s*>=\s*80[\s\S]*print\s*\(\s*["']B["']\s*\)[\s\S]*elif\s+score\s*>=\s*70[\s\S]*print\s*\(\s*["']C["']\s*\)[\s\S]*else[\s\S]*print\s*\(\s*["']F["']\s*\)/,
+                hints: ['elif is short for "else if"', 'Order matters - check highest values first', 'else catches everything that didn\'t match']
+            },
+            {
+                id: 'py-6',
+                title: 'Lists (Arrays)',
+                description: 'Store multiple values in a single variable',
+                task: 'Create a list called <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">fruits</code> containing "apple", "banana", and "orange".',
+                starterCode: '# Lists use square brackets []\n# Items are separated by commas\n\n# Create your fruits list:\nfruits = ["", "", ""]',
+                solution: /fruits\s*=\s*\[.*["']apple["'].*,.*["']banana["'].*,.*["']orange["'].*\]/i,
+                hints: ['Lists use square brackets: []', 'Separate items with commas', 'Each string needs its own quotes']
+            },
+            {
+                id: 'py-7',
+                title: 'List Methods & Slicing',
+                description: 'Manipulate lists with built-in methods',
+                task: 'Start with the list [1, 2, 3]. Use <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">.append()</code> to add 4, then print the list.',
+                starterCode: '# Lists have many useful methods\n# .append() adds to the end\n\nnumbers = [1, 2, 3]\n\n# Add 4 to the list and print it:\nnumbers.append()\nprint(numbers)',
+                solution: /numbers\.append\s*\(\s*4\s*\)\s*\n\s*print\s*\(\s*numbers\s*\)/,
+                hints: ['Use .append(value) to add to a list', 'append() adds to the end of the list', 'The value 4 goes inside the parentheses']
+            },
+            {
+                id: 'py-8',
+                title: 'Dictionaries',
+                description: 'Store key-value pairs',
+                task: 'Create a dictionary called <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">person</code> with keys "name" and "age" containing your info.',
+                starterCode: '# Dictionaries use curly braces {}\n# Format: {key: value, key: value}\n\n# Create your person dictionary:\nperson = {\n    "name": "",\n    "age": 0\n}',
+                solution: /person\s*=\s*\{\s*["']name["']\s*:\s*["'].+["']\s*,\s*["']age["']\s*:\s*\d+\s*\}/,
+                hints: ['Use curly braces {} for dictionaries', 'Keys and values are separated by colons', 'Key-value pairs are separated by commas']
+            },
+            {
+                id: 'py-9',
+                title: 'For Loops',
+                description: 'Iterate over sequences',
+                task: 'Use a for loop to print each fruit in the list ["apple", "banana", "cherry"].',
+                starterCode: '# For loops iterate over sequences\n\nfruits = ["apple", "banana", "cherry"]\n\n# Print each fruit:\nfor fruit in fruits:\n    print(fruit)',
+                solution: /for\s+\w+\s+in\s+fruits\s*:\s*\n\s+print\s*\(\s*\w+\s*\)/,
+                hints: ['Use for item in list:', 'The variable name (fruit) can be anything', 'Don\'t forget the colon and indentation']
+            },
+            {
+                id: 'py-10',
+                title: 'While Loops',
+                description: 'Loop while a condition is true',
+                task: 'Use a while loop to print numbers 1 to 5. Start with count = 1.',
+                starterCode: '# While loops continue until condition is false\n\ncount = 1\n\n# Print 1 to 5:\nwhile count <= 5:\n    print(count)\n    count += 1',
+                solution: /while\s+count\s*<=\s*5\s*:\s*\n\s+print\s*\(\s*count\s*\)\s*\n\s+count\s*\+=\s*1/,
+                hints: ['While loops need a condition that eventually becomes False', 'Use += 1 to increment the counter', 'Without incrementing, you\'ll have an infinite loop!']
+            },
+            {
+                id: 'py-11',
+                title: 'Functions',
+                description: 'Create reusable blocks of code',
+                task: 'Define a function called <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">greet</code> that takes a name parameter and returns "Hello, " + name.',
+                starterCode: '# Functions are defined with def keyword\n\n# Define your greet function:\ndef greet(name):\n    return "Hello, " + name',
+                solution: /def\s+greet\s*\(\s*name\s*\)\s*:\s*\n\s+return\s+["']Hello,?\s*["']\s*\+\s*name/,
+                hints: ['Use def function_name(parameter):', 'Return values with the return keyword', 'Use + to concatenate strings']
+            },
+            {
+                id: 'py-12',
+                title: 'Function Parameters & Defaults',
+                description: 'Work with multiple and default parameters',
+                task: 'Create a function <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">power</code> that takes base and exponent (default 2), returns base ** exponent.',
+                starterCode: '# Default parameters have = value\n\n# Create the power function:\ndef power(base, exponent=2):\n    return base ** exponent',
+                solution: /def\s+power\s*\(\s*base\s*,\s*exponent\s*=\s*2\s*\)\s*:\s*\n\s+return\s+base\s*\*\*\s*exponent/,
+                hints: ['Default parameters use = in the definition', '** is the exponent operator in Python', 'Default parameters must come after required ones']
+            },
+            {
+                id: 'py-13',
+                title: 'List Comprehensions',
+                description: 'Create lists in a concise way',
+                task: 'Use a list comprehension to create a list of squares from 1 to 5: [1, 4, 9, 16, 25].',
+                starterCode: '# List comprehensions: [expression for item in iterable]\n\n# Create squares list:\nsquares = [x**2 for x in range(1, 6)]',
+                solution: /squares\s*=\s*\[\s*\w+\s*\*\*\s*2\s+for\s+\w+\s+in\s+range\s*\(\s*1\s*,\s*6\s*\)\s*\]/,
+                hints: ['Format: [expression for variable in range()]', 'range(1, 6) gives numbers 1-5', 'x**2 squares each number']
+            },
+            {
+                id: 'py-14',
+                title: 'Lambda Functions',
+                description: 'Create anonymous inline functions',
+                task: 'Create a lambda function called <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">double</code> that takes x and returns x * 2.',
+                starterCode: '# Lambda: lambda arguments: expression\n\n# Create the double lambda:\ndouble = lambda x: x * 2',
+                solution: /double\s*=\s*lambda\s+x\s*:\s*x\s*\*\s*2/,
+                hints: ['Lambda syntax: lambda args: expression', 'No return keyword needed', 'Great for simple, one-line functions']
+            },
+            {
+                id: 'py-15',
+                title: 'File I/O - Reading Files',
+                description: 'Read data from text files',
+                task: 'Write code to open "data.txt" in read mode and read its contents into a variable called <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">content</code>.',
+                starterCode: '# Use with statement for safe file handling\n\n# Read from file:\nwith open("data.txt", "r") as file:\n    content = file.read()',
+                solution: /with\s+open\s*\(\s*["']data\.txt["']\s*,\s*["']r["']\s*\)\s*as\s+\w+\s*:\s*\n\s+content\s*=\s*\w+\.read\s*\(\s*\)/,
+                hints: ['Use with open(filename, mode) as variable:', '"r" mode is for reading', '.read() gets all content as a string']
+            },
+            {
+                id: 'py-16',
+                title: 'File I/O - Writing Files',
+                description: 'Write data to text files',
+                task: 'Write the text "Hello, File!" to a file called "output.txt".',
+                starterCode: '# "w" mode creates/overwrites files\n\n# Write to file:\nwith open("output.txt", "w") as file:\n    file.write("Hello, File!")',
+                solution: /with\s+open\s*\(\s*["']output\.txt["']\s*,\s*["']w["']\s*\)\s*as\s+\w+\s*:\s*\n\s+\w+\.write\s*\(\s*["']Hello,?\s*File!?["']\s*\)/,
+                hints: ['"w" mode writes (and overwrites)', 'Use .write() to write strings', '"a" mode appends instead of overwriting']
+            },
+            {
+                id: 'py-17',
+                title: 'Classes & Objects',
+                description: 'Create custom types with classes',
+                task: 'Create a class <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">Dog</code> with __init__ that takes name, and a method bark() that returns "Woof!".',
+                starterCode: '# Classes use the class keyword\n\nclass Dog:\n    def __init__(self, name):\n        self.name = name\n    \n    def bark(self):\n        return "Woof!"',
+                solution: /class\s+Dog\s*:\s*\n\s+def\s+__init__\s*\(\s*self\s*,\s*name\s*\)\s*:[\s\S]*self\.name\s*=\s*name[\s\S]*def\s+bark\s*\(\s*self\s*\)\s*:[\s\S]*return\s+["']Woof!?["']/,
+                hints: ['__init__ is the constructor method', 'self refers to the instance', 'All methods must have self as first parameter']
+            },
+            {
+                id: 'py-18',
+                title: 'Inheritance',
+                description: 'Create classes that inherit from others',
+                task: 'Create a class <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">Puppy</code> that inherits from Dog and adds a play() method returning "Playing!".',
+                starterCode: '# Inheritance: class Child(Parent)\n\nclass Dog:\n    def bark(self):\n        return "Woof!"\n\nclass Puppy(Dog):\n    def play(self):\n        return "Playing!"',
+                solution: /class\s+Puppy\s*\(\s*Dog\s*\)\s*:\s*\n\s+def\s+play\s*\(\s*self\s*\)\s*:\s*\n\s+return\s+["']Playing!?["']/,
+                hints: ['Put parent class in parentheses: class Child(Parent)', 'Child classes inherit all parent methods', 'You can add new methods or override existing ones']
+            },
+            {
+                id: 'py-19',
+                title: 'Error Handling (Try/Except)',
+                description: 'Handle errors gracefully',
+                task: 'Use try/except to handle a potential ZeroDivisionError. Try 10/0 and print "Cannot divide by zero!" if error occurs.',
+                starterCode: '# Try/except catches errors\n\ntry:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    print("Cannot divide by zero!")',
+                solution: /try\s*:\s*\n\s+result\s*=\s*10\s*\/\s*0\s*\n\s*except\s+ZeroDivisionError\s*:\s*\n\s+print\s*\(\s*["']Cannot divide by zero!?["']\s*\)/,
+                hints: ['Put risky code in the try block', 'Specify the error type after except', 'You can use except Exception to catch all errors']
+            },
+            {
+                id: 'py-20',
+                title: 'Decorators',
+                description: 'Modify function behavior with decorators',
+                task: 'Create a decorator <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">uppercase</code> that makes a function\'s string return value uppercase.',
+                starterCode: '# Decorators wrap functions\n\ndef uppercase(func):\n    def wrapper():\n        result = func()\n        return result.upper()\n    return wrapper\n\n@uppercase\ndef greet():\n    return "hello"',
+                solution: /def\s+uppercase\s*\(\s*func\s*\)\s*:\s*\n\s+def\s+wrapper\s*\(\s*\)\s*:[\s\S]*return\s+result\.upper\s*\(\s*\)[\s\S]*return\s+wrapper[\s\S]*@uppercase/,
+                hints: ['Decorators are functions that take a function', 'The wrapper function calls the original', '@decorator is syntactic sugar for func = decorator(func)']
+            }
+        ];
+
+        // ============================================
+        // CURRICULUM DATA - JAVASCRIPT (jsCurriculum.js)
+        // Beginner to Professional: 20 Lessons
+        // ============================================
+        const javascriptCurriculum = [
+            {
+                id: 'js-1',
+                title: 'Variables: let & const',
+                description: 'Learn the modern way to declare variables',
+                task: 'Create a variable using <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">let</code> called <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">name</code> with your name, and a <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">const</code> called <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">age</code> with a number.',
+                starterCode: '// let = can be reassigned\n// const = cannot be reassigned\n\nlet name = "";\nconst age = 0;',
+                solution: /let\s+name\s*=\s*["'].+["']\s*;?\s*\n.*const\s+age\s*=\s*\d+/,
+                hints: ['Use let for values that might change', 'Use const for values that won\'t change', 'Strings need quotes, numbers don\'t']
+            },
+            {
+                id: 'js-2',
+                title: 'Console Output',
+                description: 'Display output using console.log',
+                task: 'Use <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">console.log()</code> to display "Hello, World!" to the console.',
+                starterCode: '// console.log() outputs to the browser console\n\nconsole.log("");',
+                solution: /console\.log\s*\(\s*["']Hello,?\s*World!?["']\s*\)/i,
+                hints: ['console.log() is the main output function', 'Text needs quotes around it', 'Check spelling and punctuation']
+            },
+            {
+                id: 'js-3',
+                title: 'Basic Math Operations',
+                description: 'Perform arithmetic in JavaScript',
+                task: 'Create a variable <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">sum</code> that adds 10 and 5, then log it.',
+                starterCode: '// JavaScript supports +, -, *, /, %\n\nconst sum = 10 + 5;\nconsole.log(sum);',
+                solution: /const\s+sum\s*=\s*10\s*\+\s*5\s*;?\s*\n.*console\.log\s*\(\s*sum\s*\)/,
+                hints: ['Use + for addition', 'Store the result in a variable', 'Log the variable, not the equation']
+            },
+            {
+                id: 'js-4',
+                title: 'Strings & String Methods',
+                description: 'Work with text data',
+                task: 'Create a string <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">message</code> = "hello" and log it converted to uppercase using .toUpperCase().',
+                starterCode: '// Strings have many built-in methods\n\nconst message = "hello";\nconsole.log(message.toUpperCase());',
+                solution: /const\s+message\s*=\s*["']hello["']\s*;?\s*\n.*console\.log\s*\(\s*message\.toUpperCase\s*\(\s*\)\s*\)/,
+                hints: ['.toUpperCase() converts to uppercase', 'The method needs parentheses ()', 'Original string is unchanged']
+            },
+            {
+                id: 'js-5',
+                title: 'If/Else Statements',
+                description: 'Make decisions with conditionals',
+                task: 'Write an if/else that checks if <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">score</code> >= 60 and logs "Pass", else logs "Fail".',
+                starterCode: '// Use curly braces {} for code blocks\n\nconst score = 75;\n\nif (score >= 60) {\n    console.log("Pass");\n} else {\n    console.log("Fail");\n}',
+                solution: /if\s*\(\s*score\s*>=\s*60\s*\)\s*\{\s*\n?\s*console\.log\s*\(\s*["']Pass["']\s*\)[\s\S]*\}\s*else\s*\{\s*\n?\s*console\.log\s*\(\s*["']Fail["']\s*\)/,
+                hints: ['Condition goes in parentheses ()', 'Use curly braces {} for code blocks', 'else handles the false case']
+            },
+            {
+                id: 'js-6',
+                title: 'Arrays',
+                description: 'Store multiple values',
+                task: 'Create an array <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">colors</code> with "red", "green", "blue" and log the first element.',
+                starterCode: '// Arrays use square brackets []\n// Index starts at 0\n\nconst colors = ["red", "green", "blue"];\nconsole.log(colors[0]);',
+                solution: /const\s+colors\s*=\s*\[\s*["']red["']\s*,\s*["']green["']\s*,\s*["']blue["']\s*\]\s*;?\s*\n.*console\.log\s*\(\s*colors\s*\[\s*0\s*\]\s*\)/,
+                hints: ['Arrays use square brackets []', 'First element is at index 0', 'Access elements with array[index]']
+            },
+            {
+                id: 'js-7',
+                title: 'Array Methods',
+                description: 'Manipulate arrays with built-in methods',
+                task: 'Start with [1, 2, 3]. Use <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">.push()</code> to add 4, then log the array.',
+                starterCode: '// .push() adds to the end\n\nconst numbers = [1, 2, 3];\nnumbers.push(4);\nconsole.log(numbers);',
+                solution: /const\s+numbers\s*=\s*\[\s*1\s*,\s*2\s*,\s*3\s*\]\s*;?\s*\n.*numbers\.push\s*\(\s*4\s*\)\s*;?\s*\n.*console\.log\s*\(\s*numbers\s*\)/,
+                hints: ['.push(value) adds to the end', 'The original array is modified', 'const arrays can still be modified']
+            },
+            {
+                id: 'js-8',
+                title: 'For Loops',
+                description: 'Repeat actions with loops',
+                task: 'Use a for loop to log numbers 1 through 5.',
+                starterCode: '// for (init; condition; increment)\n\nfor (let i = 1; i <= 5; i++) {\n    console.log(i);\n}',
+                solution: /for\s*\(\s*let\s+\w+\s*=\s*1\s*;\s*\w+\s*<=\s*5\s*;\s*\w+\+\+\s*\)\s*\{\s*\n?\s*console\.log\s*\(\s*\w+\s*\)/,
+                hints: ['Start from 1: let i = 1', 'Continue while i <= 5', 'Increment with i++']
+            },
+            {
+                id: 'js-9',
+                title: 'Functions',
+                description: 'Create reusable code blocks',
+                task: 'Create a function <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">greet</code> that takes name and returns "Hello, " + name.',
+                starterCode: '// function name(params) { }\n\nfunction greet(name) {\n    return "Hello, " + name;\n}',
+                solution: /function\s+greet\s*\(\s*name\s*\)\s*\{\s*\n?\s*return\s+["']Hello,?\s*["']\s*\+\s*name/,
+                hints: ['Use function keyword', 'Parameters go in parentheses', 'return sends back a value']
+            },
+            {
+                id: 'js-10',
+                title: 'Arrow Functions',
+                description: 'Modern, concise function syntax',
+                task: 'Convert this to an arrow function: create <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">double</code> that takes x and returns x * 2.',
+                starterCode: '// Arrow function: (params) => expression\n\nconst double = (x) => x * 2;',
+                solution: /const\s+double\s*=\s*\(?\s*x\s*\)?\s*=>\s*x\s*\*\s*2/,
+                hints: ['Arrow functions use =>', 'Single expression doesn\'t need return', 'Parentheses optional for single parameter']
+            },
+            {
+                id: 'js-11',
+                title: 'Objects',
+                description: 'Store related data together',
+                task: 'Create an object <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">person</code> with name and age properties.',
+                starterCode: '// Objects use curly braces {}\n\nconst person = {\n    name: "John",\n    age: 30\n};',
+                solution: /const\s+person\s*=\s*\{\s*\n?\s*name\s*:\s*["'].+["']\s*,\s*\n?\s*age\s*:\s*\d+\s*\n?\s*\}/,
+                hints: ['Use curly braces {} for objects', 'Properties use key: value format', 'Separate properties with commas']
+            },
+            {
+                id: 'js-12',
+                title: 'DOM Manipulation Basics',
+                description: 'Interact with HTML elements',
+                task: 'Use <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">document.getElementById()</code> to get an element with id "title" and store it in a variable.',
+                starterCode: '// DOM = Document Object Model\n\nconst title = document.getElementById("title");',
+                solution: /const\s+\w+\s*=\s*document\.getElementById\s*\(\s*["']title["']\s*\)/,
+                hints: ['document represents the page', 'getElementById finds by id attribute', 'Returns the element or null']
+            },
+            {
+                id: 'js-13',
+                title: 'Event Listeners',
+                description: 'Respond to user actions',
+                task: 'Add a click event listener to a button that logs "Clicked!" when activated.',
+                starterCode: '// .addEventListener(event, handler)\n\nconst button = document.getElementById("btn");\nbutton.addEventListener("click", function() {\n    console.log("Clicked!");\n});',
+                solution: /\.addEventListener\s*\(\s*["']click["']\s*,\s*(function\s*\(\s*\)|[\w]+|\(\s*\)\s*=>)\s*(\{[\s\S]*console\.log\s*\(\s*["']Clicked!?["']\s*\)|console\.log\s*\(\s*["']Clicked!?["']\s*\))/,
+                hints: ['First argument is the event type', 'Second argument is the handler function', 'Common events: click, submit, keydown']
+            },
+            {
+                id: 'js-14',
+                title: 'Destructuring',
+                description: 'Extract values elegantly',
+                task: 'Use destructuring to extract name and age from a person object.',
+                starterCode: '// Destructuring: { prop1, prop2 } = object\n\nconst person = { name: "John", age: 30 };\nconst { name, age } = person;',
+                solution: /const\s*\{\s*name\s*,\s*age\s*\}\s*=\s*person/,
+                hints: ['Use {} for object destructuring', 'Variable names must match property names', 'Creates separate variables']
+            },
+            {
+                id: 'js-15',
+                title: 'Spread & Rest Operators',
+                description: 'Use ... for flexible arrays and objects',
+                task: 'Use the spread operator to combine [1, 2] and [3, 4] into a new array.',
+                starterCode: '// Spread: ...array expands elements\n\nconst arr1 = [1, 2];\nconst arr2 = [3, 4];\nconst combined = [...arr1, ...arr2];',
+                solution: /const\s+combined\s*=\s*\[\s*\.\.\.arr1\s*,\s*\.\.\.arr2\s*\]/,
+                hints: ['... spreads array elements', 'Works in array literals []', 'Also works for objects {}']
+            },
+            {
+                id: 'js-16',
+                title: 'Promises',
+                description: 'Handle asynchronous operations',
+                task: 'Create a Promise that resolves with "Success!" after the executor runs.',
+                starterCode: '// Promises handle async operations\n\nconst myPromise = new Promise((resolve, reject) => {\n    resolve("Success!");\n});',
+                solution: /new\s+Promise\s*\(\s*\(\s*resolve\s*,?\s*reject?\s*\)\s*=>\s*\{\s*\n?\s*resolve\s*\(\s*["']Success!?["']\s*\)/,
+                hints: ['Promise takes an executor function', 'resolve() for success', 'reject() for failure']
+            },
+            {
+                id: 'js-17',
+                title: 'Async/Await',
+                description: 'Write cleaner async code',
+                task: 'Create an async function <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">fetchData</code> that awaits a promise and returns its result.',
+                starterCode: '// async/await makes Promises easier\n\nasync function fetchData() {\n    const result = await somePromise;\n    return result;\n}',
+                solution: /async\s+function\s+fetchData\s*\(\s*\)\s*\{\s*\n?\s*const\s+result\s*=\s*await\s+\w+\s*;?\s*\n?\s*return\s+result/,
+                hints: ['async keyword before function', 'await pauses until Promise resolves', 'Must be inside async function']
+            },
+            {
+                id: 'js-18',
+                title: 'JSON Parsing',
+                description: 'Work with JSON data',
+                task: 'Parse a JSON string \'{"name":"John"}\' into an object using JSON.parse().',
+                starterCode: '// JSON.parse() converts string to object\n\nconst jsonString = \'{"name":"John"}\';\nconst obj = JSON.parse(jsonString);',
+                solution: /const\s+obj\s*=\s*JSON\.parse\s*\(\s*jsonString\s*\)/,
+                hints: ['JSON.parse() converts string to object', 'JSON.stringify() does the opposite', 'JSON keys must be double-quoted']
+            },
+            {
+                id: 'js-19',
+                title: 'Fetch API',
+                description: 'Make HTTP requests',
+                task: 'Use fetch to make a GET request to an API URL and log the response.',
+                starterCode: '// fetch() returns a Promise\n\nfetch("https://api.example.com/data")\n    .then(response => response.json())\n    .then(data => console.log(data));',
+                solution: /fetch\s*\(\s*["']https?:\/\/.+["']\s*\)\s*\n?\s*\.then\s*\(\s*\w+\s*=>\s*\w+\.json\s*\(\s*\)\s*\)\s*\n?\s*\.then/,
+                hints: ['fetch() returns a Promise', '.json() parses the response', 'Chain .then() for each step']
+            },
+            {
+                id: 'js-20',
+                title: 'LocalStorage',
+                description: 'Store data in the browser',
+                task: 'Save a value "John" with key "username" to localStorage, then retrieve it.',
+                starterCode: '// localStorage persists data\n\nlocalStorage.setItem("username", "John");\nconst user = localStorage.getItem("username");',
+                solution: /localStorage\.setItem\s*\(\s*["']username["']\s*,\s*["']John["']\s*\)\s*;?\s*\n.*localStorage\.getItem\s*\(\s*["']username["']\s*\)/,
+                hints: ['setItem(key, value) stores data', 'getItem(key) retrieves data', 'Data persists after browser closes']
+            }
+        ];
+
+        // ============================================
+        // CURRICULUM DATA - JAVA (javaCurriculum.js)
+        // Beginner to Professional: 20 Lessons
+        // ============================================
+        const javaCurriculum = [
+            {
+                id: 'java-1',
+                title: 'Hello World & Main Method',
+                description: 'Understand Java program structure',
+                task: 'Create the main method and print "Hello, World!" using System.out.println().',
+                starterCode: '// Every Java program needs a main method\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}',
+                solution: /public\s+static\s+void\s+main\s*\(\s*String\s*\[\s*\]\s*args\s*\)\s*\{\s*\n?\s*System\.out\.println\s*\(\s*["']Hello,?\s*World!?["']\s*\)/,
+                hints: ['main method is the entry point', 'public static void main(String[] args)', 'System.out.println() prints a line']
+            },
+            {
+                id: 'java-2',
+                title: 'Data Types',
+                description: 'Learn Java\'s primitive types',
+                task: 'Declare an <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">int</code> called age, a <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">double</code> called price, and a <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">boolean</code> called isActive.',
+                starterCode: '// Java is strongly typed\n\npublic class Main {\n    public static void main(String[] args) {\n        int age = 25;\n        double price = 19.99;\n        boolean isActive = true;\n    }\n}',
+                solution: /int\s+age\s*=\s*\d+\s*;\s*\n\s*double\s+price\s*=\s*[\d.]+\s*;\s*\n\s*boolean\s+isActive\s*=\s*(true|false)\s*;/,
+                hints: ['int for whole numbers', 'double for decimals', 'boolean for true/false']
+            },
+            {
+                id: 'java-3',
+                title: 'Strings',
+                description: 'Work with text in Java',
+                task: 'Create a String variable <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">name</code> and print it with a greeting.',
+                starterCode: '// Strings use double quotes\n\npublic class Main {\n    public static void main(String[] args) {\n        String name = "John";\n        System.out.println("Hello, " + name);\n    }\n}',
+                solution: /String\s+name\s*=\s*["'].+["']\s*;\s*\n\s*System\.out\.println\s*\(\s*["']Hello,?\s*["']\s*\+\s*name\s*\)/,
+                hints: ['String starts with capital S', 'Use + for concatenation', 'Strings use double quotes only']
+            },
+            {
+                id: 'java-4',
+                title: 'Variables & Constants',
+                description: 'Declare variables and constants',
+                task: 'Create a constant <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">PI</code> with value 3.14159 using the final keyword.',
+                starterCode: '// final makes a variable constant\n\npublic class Main {\n    public static void main(String[] args) {\n        final double PI = 3.14159;\n        System.out.println(PI);\n    }\n}',
+                solution: /final\s+double\s+PI\s*=\s*3\.14159\s*;/,
+                hints: ['final keyword creates constants', 'Constants are usually UPPERCASE', 'final variables cannot be changed']
+            },
+            {
+                id: 'java-5',
+                title: 'If/Else Statements',
+                description: 'Control flow with conditionals',
+                task: 'Write an if/else that checks if score >= 60 and prints "Pass" or "Fail".',
+                starterCode: '// Java uses curly braces for blocks\n\npublic class Main {\n    public static void main(String[] args) {\n        int score = 75;\n        \n        if (score >= 60) {\n            System.out.println("Pass");\n        } else {\n            System.out.println("Fail");\n        }\n    }\n}',
+                solution: /if\s*\(\s*score\s*>=\s*60\s*\)\s*\{\s*\n?\s*System\.out\.println\s*\(\s*["']Pass["']\s*\)[\s\S]*\}\s*else\s*\{\s*\n?\s*System\.out\.println\s*\(\s*["']Fail["']\s*\)/,
+                hints: ['Condition goes in parentheses', 'Use curly braces for blocks', 'else handles the false case']
+            },
+            {
+                id: 'java-6',
+                title: 'Switch Statements',
+                description: 'Handle multiple cases efficiently',
+                task: 'Create a switch statement for a day number (1-7) that prints the day name for case 1 (Monday).',
+                starterCode: '// Switch for multiple conditions\n\npublic class Main {\n    public static void main(String[] args) {\n        int day = 1;\n        \n        switch (day) {\n            case 1:\n                System.out.println("Monday");\n                break;\n            default:\n                System.out.println("Other day");\n        }\n    }\n}',
+                solution: /switch\s*\(\s*day\s*\)\s*\{[\s\S]*case\s+1\s*:[\s\S]*System\.out\.println\s*\(\s*["']Monday["']\s*\)[\s\S]*break\s*;/,
+                hints: ['switch matches value to cases', 'break prevents fall-through', 'default handles unmatched values']
+            },
+            {
+                id: 'java-7',
+                title: 'For Loops',
+                description: 'Iterate a specific number of times',
+                task: 'Use a for loop to print numbers 1 through 5.',
+                starterCode: '// for (init; condition; increment)\n\npublic class Main {\n    public static void main(String[] args) {\n        for (int i = 1; i <= 5; i++) {\n            System.out.println(i);\n        }\n    }\n}',
+                solution: /for\s*\(\s*int\s+\w+\s*=\s*1\s*;\s*\w+\s*<=\s*5\s*;\s*\w+\+\+\s*\)\s*\{\s*\n?\s*System\.out\.println\s*\(\s*\w+\s*\)/,
+                hints: ['Start: int i = 1', 'Condition: i <= 5', 'Increment: i++']
+            },
+            {
+                id: 'java-8',
+                title: 'While Loops',
+                description: 'Loop while condition is true',
+                task: 'Use a while loop to print numbers 1 to 5.',
+                starterCode: '// while (condition) { }\n\npublic class Main {\n    public static void main(String[] args) {\n        int i = 1;\n        while (i <= 5) {\n            System.out.println(i);\n            i++;\n        }\n    }\n}',
+                solution: /while\s*\(\s*\w+\s*<=\s*5\s*\)\s*\{\s*\n?\s*System\.out\.println\s*\(\s*\w+\s*\)\s*;\s*\n?\s*\w+\+\+\s*;/,
+                hints: ['Initialize counter before loop', 'Check condition each iteration', 'Don\'t forget to increment!']
+            },
+            {
+                id: 'java-9',
+                title: 'Arrays',
+                description: 'Store fixed-size collections',
+                task: 'Create a String array with 3 fruit names and print the first one.',
+                starterCode: '// Arrays have fixed size\n\npublic class Main {\n    public static void main(String[] args) {\n        String[] fruits = {"apple", "banana", "cherry"};\n        System.out.println(fruits[0]);\n    }\n}',
+                solution: /String\s*\[\s*\]\s*fruits\s*=\s*\{.*["']apple["'].*,.*["']banana["'].*,.*["']cherry["'].*\}\s*;\s*\n?\s*System\.out\.println\s*\(\s*fruits\s*\[\s*0\s*\]\s*\)/,
+                hints: ['Type[] name = {values}', 'Index starts at 0', 'Access with array[index]']
+            },
+            {
+                id: 'java-10',
+                title: 'Methods',
+                description: 'Create reusable code blocks',
+                task: 'Create a static method <code class="code-font bg-gray-700 px-1.5 py-0.5 rounded">greet</code> that takes a String name and returns "Hello, " + name.',
+                starterCode: '// Methods define reusable behavior\n\npublic class Main {\n    public static String greet(String name) {\n        return "Hello, " + name;\n    }\n    \n    public static void main(String[] args) {\n        System.out.println(greet("World"));\n    }\n}',
+                solution: /public\s+static\s+String\s+greet\s*\(\s*String\s+name\s*\)\s*\{\s*\n?\s*return\s+["']Hello,?\s*["']\s*\+\s*name\s*;/,
+                hints: ['Specify return type', 'Parameters need types', 'return sends back value']
+            },
+            {
+                id: 'java-11',
+                title: 'Method Overloading',
+                description: 'Create methods with same name, different parameters',
+                task: 'Create two add methods: one for two ints, one for three ints.',
+                starterCode: '// Same name, different parameters\n\npublic class Main {\n    public static int add(int a, int b) {\n        return a + b;\n    }\n    \n    public static int add(int a, int b, int c) {\n        return a + b + c;\n    }\n    \n    public static void main(String[] args) {\n        System.out.println(add(1, 2));\n        System.out.println(add(1, 2, 3));\n    }\n}',
+                solution: /public\s+static\s+int\s+add\s*\(\s*int\s+\w+\s*,\s*int\s+\w+\s*\)[\s\S]*public\s+static\s+int\s+add\s*\(\s*int\s+\w+\s*,\s*int\s+\w+\s*,\s*int\s+\w+\s*\)/,
+                hints: ['Same method name allowed', 'Parameters must differ', 'Compiler picks correct version']
+            },
+            {
+                id: 'java-12',
+                title: 'Classes & Objects',
+                description: 'Create custom types',
+                task: 'Create a Dog class with a name field and bark() method that returns "Woof!".',
+                starterCode: '// Classes define blueprints\n\nclass Dog {\n    String name;\n    \n    public String bark() {\n        return "Woof!";\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Dog myDog = new Dog();\n        myDog.name = "Buddy";\n        System.out.println(myDog.bark());\n    }\n}',
+                solution: /class\s+Dog\s*\{\s*\n?\s*String\s+name\s*;[\s\S]*public\s+String\s+bark\s*\(\s*\)\s*\{\s*\n?\s*return\s+["']Woof!?["']\s*;/,
+                hints: ['class defines the blueprint', 'Fields store data', 'Methods define behavior']
+            },
+            {
+                id: 'java-13',
+                title: 'Constructors',
+                description: 'Initialize objects properly',
+                task: 'Add a constructor to Dog that takes and sets the name.',
+                starterCode: '// Constructor initializes objects\n\nclass Dog {\n    String name;\n    \n    public Dog(String name) {\n        this.name = name;\n    }\n    \n    public String bark() {\n        return "Woof!";\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Dog myDog = new Dog("Buddy");\n        System.out.println(myDog.name);\n    }\n}',
+                solution: /public\s+Dog\s*\(\s*String\s+name\s*\)\s*\{\s*\n?\s*this\.name\s*=\s*name\s*;/,
+                hints: ['Constructor name = class name', 'No return type', 'this refers to current object']
+            },
+            {
+                id: 'java-14',
+                title: 'Encapsulation',
+                description: 'Protect data with access modifiers',
+                task: 'Make name private and add getName() and setName() methods.',
+                starterCode: '// private + getters/setters\n\nclass Dog {\n    private String name;\n    \n    public String getName() {\n        return this.name;\n    }\n    \n    public void setName(String name) {\n        this.name = name;\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Dog myDog = new Dog();\n        myDog.setName("Buddy");\n        System.out.println(myDog.getName());\n    }\n}',
+                solution: /private\s+String\s+name\s*;[\s\S]*public\s+String\s+getName\s*\(\s*\)[\s\S]*public\s+void\s+setName\s*\(\s*String\s+name\s*\)/,
+                hints: ['private hides the field', 'Getter returns value', 'Setter updates value']
+            },
+            {
+                id: 'java-15',
+                title: 'Inheritance',
+                description: 'Create class hierarchies',
+                task: 'Create a Puppy class that extends Dog and adds a play() method.',
+                starterCode: '// extends creates inheritance\n\nclass Dog {\n    public String bark() {\n        return "Woof!";\n    }\n}\n\nclass Puppy extends Dog {\n    public String play() {\n        return "Playing!";\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Puppy p = new Puppy();\n        System.out.println(p.bark());\n        System.out.println(p.play());\n    }\n}',
+                solution: /class\s+Puppy\s+extends\s+Dog\s*\{\s*\n?\s*public\s+String\s+play\s*\(\s*\)\s*\{\s*\n?\s*return\s+["']Playing!?["']/,
+                hints: ['extends creates inheritance', 'Child gets parent methods', 'Child can add new methods']
+            },
+            {
+                id: 'java-16',
+                title: 'Polymorphism',
+                description: 'Override methods in subclasses',
+                task: 'Override the bark() method in Puppy to return "Yip!".',
+                starterCode: '// @Override for clarity\n\nclass Dog {\n    public String bark() {\n        return "Woof!";\n    }\n}\n\nclass Puppy extends Dog {\n    @Override\n    public String bark() {\n        return "Yip!";\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Dog d = new Puppy();\n        System.out.println(d.bark());\n    }\n}',
+                solution: /@Override\s*\n?\s*public\s+String\s+bark\s*\(\s*\)\s*\{\s*\n?\s*return\s+["']Yip!?["']/,
+                hints: ['@Override is optional but helpful', 'Same method signature required', 'Child version is called']
+            },
+            {
+                id: 'java-17',
+                title: 'Interfaces',
+                description: 'Define contracts for classes',
+                task: 'Create an interface Speakable with a speak() method, implement it in Dog.',
+                starterCode: '// interface defines contract\n\ninterface Speakable {\n    String speak();\n}\n\nclass Dog implements Speakable {\n    public String speak() {\n        return "Woof!";\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Speakable s = new Dog();\n        System.out.println(s.speak());\n    }\n}',
+                solution: /interface\s+Speakable\s*\{\s*\n?\s*String\s+speak\s*\(\s*\)\s*;[\s\S]*class\s+Dog\s+implements\s+Speakable/,
+                hints: ['interface defines methods without body', 'implements to use interface', 'Must implement all methods']
+            },
+            {
+                id: 'java-18',
+                title: 'Abstract Classes',
+                description: 'Create partially implemented classes',
+                task: 'Create an abstract class Animal with abstract speak() method.',
+                starterCode: '// abstract = partial implementation\n\nabstract class Animal {\n    public abstract String speak();\n    \n    public void sleep() {\n        System.out.println("Zzz...");\n    }\n}\n\nclass Dog extends Animal {\n    public String speak() {\n        return "Woof!";\n    }\n}\n\npublic class Main {\n    public static void main(String[] args) {\n        Animal a = new Dog();\n        System.out.println(a.speak());\n    }\n}',
+                solution: /abstract\s+class\s+Animal\s*\{[\s\S]*public\s+abstract\s+String\s+speak\s*\(\s*\)\s*;/,
+                hints: ['abstract class can\'t be instantiated', 'abstract methods have no body', 'Subclasses must implement them']
+            },
+            {
+                id: 'java-19',
+                title: 'ArrayList & HashMap',
+                description: 'Use dynamic collections',
+                task: 'Create an ArrayList of Strings and add three names to it.',
+                starterCode: '// ArrayList grows dynamically\n\nimport java.util.ArrayList;\n\npublic class Main {\n    public static void main(String[] args) {\n        ArrayList<String> names = new ArrayList<>();\n        names.add("Alice");\n        names.add("Bob");\n        names.add("Charlie");\n        System.out.println(names);\n    }\n}',
+                solution: /ArrayList<String>\s+\w+\s*=\s*new\s+ArrayList<>\s*\(\s*\)\s*;[\s\S]*\.add\s*\([\s\S]*\.add\s*\([\s\S]*\.add\s*\(/,
+                hints: ['ArrayList<Type> for type safety', 'new ArrayList<>() creates it', '.add() appends elements']
+            },
+            {
+                id: 'java-20',
+                title: 'Try/Catch & Exceptions',
+                description: 'Handle errors gracefully',
+                task: 'Use try/catch to handle a potential ArithmeticException when dividing by zero.',
+                starterCode: '// try/catch handles exceptions\n\npublic class Main {\n    public static void main(String[] args) {\n        try {\n            int result = 10 / 0;\n        } catch (ArithmeticException e) {\n            System.out.println("Cannot divide by zero!");\n        }\n    }\n}',
+                solution: /try\s*\{\s*\n?\s*int\s+result\s*=\s*10\s*\/\s*0\s*;[\s\S]*\}\s*catch\s*\(\s*ArithmeticException\s+\w+\s*\)\s*\{\s*\n?\s*System\.out\.println\s*\(\s*["']Cannot divide by zero!?["']\s*\)/,
+                hints: ['try contains risky code', 'catch handles specific exception', 'e contains error details']
+            }
+        ];
+
+        // ============================================
+        // CURRICULUM MANAGER - Combines all curricula
+        // ============================================
+        const curriculum = {
+            python: {
+                name: 'Python',
+                lessons: pythonCurriculum
+            },
+            javascript: {
+                name: 'JavaScript',
+                lessons: javascriptCurriculum
+            },
+            java: {
+                name: 'Java',
+                lessons: javaCurriculum
+            }
+        };
+
+        // ============================================
+        // APPLICATION STATE
+        // ============================================
+        const AppState = {
+            theme: 'dark',
+            currentTab: 'learn',
+            currentLanguage: 'python',
+            currentLessonIndex: 0,
+            progress: {
+                python: { completed: [], current: 0 },
+                javascript: { completed: [], current: 0 },
+                java: { completed: [], current: 0 }
+            },
+            projects: [],
+            currentProject: null,
+            currentFile: null,
+            editor: null,
+            projectEditor: null
+        };
+
+        // Load progress from localStorage
+        function loadProgress() {
+            const saved = localStorage.getItem('tricode_progress');
+            if (saved) {
+                try {
+                    AppState.progress = JSON.parse(saved);
+                } catch (e) {
+                    console.error('Failed to load progress:', e);
+                }
+            }
+            
+            const savedProjects = localStorage.getItem('tricode_projects');
+            if (savedProjects) {
+                try {
+                    AppState.projects = JSON.parse(savedProjects);
+                } catch (e) {
+                    console.error('Failed to load projects:', e);
+                }
+            }
+        }
+
+        // Save progress to localStorage
+        function saveProgress() {
+            localStorage.setItem('tricode_progress', JSON.stringify(AppState.progress));
+            localStorage.setItem('tricode_projects', JSON.stringify(AppState.projects));
+        }
+
+        // ============================================
+        // THEME MANAGEMENT (ThemeContext.js equivalent)
+        // ============================================
+        function toggleTheme() {
+            AppState.theme = AppState.theme === 'dark' ? 'light' : 'dark';
+            applyTheme();
+            updateMonacoTheme();
+        }
+
+        function applyTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('theme-toggle');
+            const moonIcon = document.getElementById('moon-icon');
+            const sunIcon = document.getElementById('sun-icon');
+            
+            if (AppState.theme === 'dark') {
+                body.classList.remove('light');
+                body.classList.add('dark');
+                body.style.backgroundColor = '#111827';
+                body.style.color = '#f3f4f6';
+                moonIcon.classList.remove('hidden');
+                sunIcon.classList.add('hidden');
+                themeToggle.querySelector('span').textContent = 'Dark';
+                
+                // Update all theme-transition elements
+                document.querySelectorAll('.theme-transition').forEach(el => {
+                    if (el.classList.contains('bg-gray-900') || el.classList.contains('bg-gray-950') || el.classList.contains('bg-gray-850') || el.classList.contains('bg-gray-800')) {
+                        // Keep dark backgrounds
+                    }
+                });
+            } else {
+                body.classList.remove('dark');
+                body.classList.add('light');
+                body.style.backgroundColor = '#f9fafb';
+                body.style.color = '#111827';
+                moonIcon.classList.add('hidden');
+                sunIcon.classList.remove('hidden');
+                themeToggle.querySelector('span').textContent = 'Light';
+            }
+            
+            // Apply theme classes to major sections
+            updateThemeClasses();
+        }
+
+        function updateThemeClasses() {
+            const isDark = AppState.theme === 'dark';
+            
+            // Title bar
+            const titlebar = document.querySelector('.window-titlebar');
+            titlebar.style.backgroundColor = isDark ? '#030712' : '#f3f4f6';
+            titlebar.style.borderColor = isDark ? '#1f2937' : '#e5e7eb';
+            
+            // Nav tabs
+            const navTabs = document.querySelector('.nav-tabs');
+            navTabs.style.backgroundColor = isDark ? '#111827' : '#ffffff';
+            navTabs.style.borderColor = isDark ? '#1f2937' : '#e5e7eb';
+            
+            // Update nav tab buttons
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                if (tab.classList.contains('active')) {
+                    tab.style.backgroundColor = isDark ? '#3b82f6' : '#3b82f6';
+                    tab.style.color = '#ffffff';
+                } else {
+                    tab.style.backgroundColor = 'transparent';
+                    tab.style.color = isDark ? '#9ca3af' : '#6b7280';
+                }
+            });
+            
+            // Language buttons
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                if (btn.classList.contains('active')) {
+                    btn.style.backgroundColor = isDark ? 'rgba(59, 130, 246, 0.2)' : 'rgba(59, 130, 246, 0.15)';
+                    btn.style.borderColor = '#3b82f6';
+                    btn.style.border = '1px solid #3b82f6';
+                } else {
+                    btn.style.backgroundColor = 'transparent';
+                    btn.style.border = '1px solid transparent';
+                }
+            });
+            
+            // Lesson items
+            document.querySelectorAll('.lesson-item').forEach(item => {
+                const isActive = item.classList.contains('active');
+                const isLocked = item.classList.contains('locked');
+                
+                if (isActive) {
+                    item.style.backgroundColor = isDark ? 'rgba(59, 130, 246, 0.2)' : 'rgba(59, 130, 246, 0.15)';
+                } else if (!isLocked) {
+                    item.style.backgroundColor = 'transparent';
+                } else {
+                    item.style.backgroundColor = 'transparent';
+                    item.style.opacity = '0.5';
+                }
+            });
+            
+            // Sidebar backgrounds
+            document.querySelectorAll('.language-sidebar').forEach(el => {
+                el.style.backgroundColor = isDark ? 'rgba(17, 24, 39, 0.5)' : 'rgba(243, 244, 246, 0.8)';
+                el.style.borderColor = isDark ? '#1f2937' : '#e5e7eb';
+            });
+            
+            // Lesson header
+            const lessonHeader = document.querySelector('.lesson-header');
+            if (lessonHeader) {
+                lessonHeader.style.backgroundColor = isDark ? '#111827' : '#ffffff';
+                lessonHeader.style.borderColor = isDark ? '#1f2937' : '#e5e7eb';
+            }
+            
+            // Instructions panel
+            const instructionsPanel = document.getElementById('instructions-panel');
+            if (instructionsPanel) {
+                instructionsPanel.style.backgroundColor = isDark ? 'rgba(17, 24, 39, 0.3)' : 'rgba(243, 244, 246, 0.5)';
+                instructionsPanel.style.borderColor = isDark ? '#1f2937' : '#e5e7eb';
+            }
+            
+            // Output console
+            const outputConsole = document.querySelector('.output-console');
+            if (outputConsole) {
+                outputConsole.style.backgroundColor = isDark ? '#030712' : '#f3f4f6';
+                outputConsole.style.borderColor = isDark ? '#1f2937' : '#e5e7eb';
+            }
+            
+            // Cards in progress tab
+            document.querySelectorAll('#progress-tab .bg-gray-800').forEach(card => {
+                card.style.backgroundColor = isDark ? '#1f2937' : '#ffffff';
+                card.style.borderColor = isDark ? '#374151' : '#e5e7eb';
+            });
+        }
+
+        function updateMonacoTheme() {
+            if (AppState.editor) {
+                monaco.editor.setTheme(AppState.theme === 'dark' ? 'vs-dark' : 'vs');
+            }
+            if (AppState.projectEditor) {
+                monaco.editor.setTheme(AppState.theme === 'dark' ? 'vs-dark' : 'vs');
+            }
+        }
+
+        // ============================================
+        // NAVIGATION
+        // ============================================
+        function switchTab(tabName) {
+            AppState.currentTab = tabName;
+            
+            // Update tab buttons
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.dataset.tab === tabName) {
+                    tab.classList.add('active');
+                }
+            });
+            
+            // Show/hide content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            const activeContent = document.getElementById(`${tabName}-tab`);
+            activeContent.classList.remove('hidden');
+            activeContent.classList.add('animate-fade-in');
+            
+            updateThemeClasses();
+            
+            // Refresh Monaco if switching to projects
+            if (tabName === 'projects' && AppState.currentProject && AppState.currentFile) {
+                setTimeout(() => {
+                    if (AppState.projectEditor) {
+                        AppState.projectEditor.layout();
+                    }
+                }, 100);
+            }
+            
+            // Update progress if switching to progress tab
+            if (tabName === 'progress') {
+                updateProgressDisplay();
+            }
+        }
+
+        function switchLanguage(language) {
+            AppState.currentLanguage = language;
+            AppState.currentLessonIndex = Math.min(
+                AppState.progress[language].current,
+                curriculum[language].lessons.length - 1
+            );
+            
+            // Update language buttons
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.lang === language) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            renderLessonsList();
+            loadLesson();
+            updateThemeClasses();
+            updateLessonNavButtons();
+        }
+
+        // ============================================
+        // LESSONS RENDERING
+        // ============================================
+        function renderLessonsList() {
+            const container = document.getElementById('lessons-list');
+            const lessons = curriculum[AppState.currentLanguage].lessons;
+            const progress = AppState.progress[AppState.currentLanguage];
+            
+            container.innerHTML = lessons.map((lesson, index) => {
+                const isCompleted = progress.completed.includes(lesson.id);
+                const isActive = index === AppState.currentLessonIndex;
+                const isLocked = index > progress.current && !isCompleted;
+                
+                return `
+                    <button 
+                        class="lesson-item w-full flex items-center gap-3 p-3 rounded-lg transition-all duration-200 ${isActive ? 'active' : ''} ${isLocked ? 'locked cursor-not-allowed' : 'cursor-pointer hover:bg-gray-700/50'}"
+                        data-index="${index}"
+                        ${isLocked ? 'disabled' : ''}
+                    >
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                            isCompleted ? 'bg-green-600' : isActive ? 'bg-blue-600' : isLocked ? 'bg-gray-600' : 'bg-gray-700'
+                        }">
+                            ${isCompleted ? `
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                            ` : isLocked ? `
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                </svg>
+                            ` : `
+                                <span class="text-sm font-medium">${index + 1}</span>
+                            `}
+                        </div>
+                        <div class="text-left">
+                            <div class="text-sm font-medium ${isLocked ? 'text-gray-500' : ''}">${lesson.title}</div>
+                        </div>
+                    </button>
+                `;
+            }).join('');
+            
+            // Add click handlers
+            container.querySelectorAll('.lesson-item:not([disabled])').forEach(item => {
+                item.addEventListener('click', () => {
+                    const index = parseInt(item.dataset.index);
+                    AppState.currentLessonIndex = index;
+                    renderLessonsList();
+                    loadLesson();
+                });
+            });
+            
+            updateThemeClasses();
+        }
+
+        function loadLesson() {
+            const lesson = curriculum[AppState.currentLanguage].lessons[AppState.currentLessonIndex];
+            
+            document.getElementById('lesson-title').textContent = lesson.title;
+            document.getElementById('lesson-description').textContent = lesson.description;
+            document.getElementById('task-description').innerHTML = lesson.task;
+            
+            if (AppState.editor) {
+                AppState.editor.setValue(lesson.starterCode);
+                AppState.editor.getModel().setLanguage(getMonacoLanguage(AppState.currentLanguage));
+                clearErrorDecorations();
+            }
+            
+            // Clear output
+            document.getElementById('output-content').innerHTML = '<span class="text-gray-500">// Run your code to see output here</span>';
+            
+            // Update navigation buttons
+            updateLessonNavButtons();
+            
+            // Update page title for SEO
+            document.title = `${lesson.title} - ${curriculum[AppState.currentLanguage].name} | TriCode`;
+            
+            // Initialize any quizzes in the task description
+            setTimeout(() => {
+                initQuizzes();
+                addCopyCodeButtons();
+            }, 100);
+        }
+
+        // ============================================
+        // MONACO EDITOR SETUP (EditorComponent.js equivalent)
+        // ============================================
+        function initMonacoEditor() {
+            require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs' } });
+            
+            require(['vs/editor/editor.main'], function () {
+                // Main lesson editor
+                AppState.editor = monaco.editor.create(document.getElementById('monaco-editor'), {
+                    value: curriculum[AppState.currentLanguage].lessons[0].starterCode,
+                    language: getMonacoLanguage(AppState.currentLanguage),
+                    theme: AppState.theme === 'dark' ? 'vs-dark' : 'vs',
+                    fontSize: 14,
+                    fontFamily: "'JetBrains Mono', monospace",
+                    minimap: { enabled: false },
+                    lineNumbers: 'on',
+                    scrollBeyondLastLine: false,
+                    automaticLayout: true,
+                    tabSize: 4,
+                    insertSpaces: true,
+                    wordWrap: 'on',
+                    padding: { top: 16, bottom: 16 }
+                });
+                
+                // Load saved progress
+                loadProgress();
+                AppState.currentLessonIndex = AppState.progress[AppState.currentLanguage].current;
+                renderLessonsList();
+                loadLesson();
+                updateProgressDisplay();
+            });
+        }
+
+        function getMonacoLanguage(lang) {
+            const map = {
+                python: 'python',
+                javascript: 'javascript',
+                java: 'java'
+            };
+            return map[lang] || 'plaintext';
+        }
+
+        let errorDecorations = [];
+
+        function highlightErrorLine(lineNumber) {
+            if (!AppState.editor || !lineNumber) return;
+            
+            errorDecorations = AppState.editor.deltaDecorations(errorDecorations, [
+                {
+                    range: new monaco.Range(lineNumber, 1, lineNumber, 1),
+                    options: {
+                        isWholeLine: true,
+                        className: 'error-line-decoration',
+                        glyphMarginClassName: 'error-glyph'
+                    }
+                }
+            ]);
+        }
+
+        function clearErrorDecorations() {
+            if (AppState.editor) {
+                errorDecorations = AppState.editor.deltaDecorations(errorDecorations, []);
+            }
+        }
+
+        // ============================================
+        // CODE EXECUTION & VALIDATION
+        // ============================================
+        function runCode() {
+            const code = AppState.editor.getValue();
+            const outputEl = document.getElementById('output-content');
+            
+            clearErrorDecorations();
+            
+            // Check for errors and get error info
+            const errorInfo = checkForErrors(code, AppState.currentLanguage);
+            
+            if (errorInfo) {
+                outputEl.innerHTML = `<span class="text-red-400">Error: ${escapeHtml(errorInfo.message)}</span>`;
+                if (errorInfo.line) {
+                    highlightErrorLine(errorInfo.line);
+                }
+                return;
+            }
+            
+            // Simulate code execution
+            let output = simulateExecution(code, AppState.currentLanguage);
+            outputEl.innerHTML = `<span class="text-green-400">${escapeHtml(output)}</span>`;
+        }
+
+        function simulateExecution(code, language) {
+            let output = '';
+            
+            // Simulate output based on code content
+            if (language === 'python') {
+                const printMatches = code.match(/print\s*\(\s*["']([^"']+)["']\s*\)/g);
+                if (printMatches) {
+                    printMatches.forEach(match => {
+                        const content = match.match(/print\s*\(\s*["']([^"']+)["']\s*\)/);
+                        if (content) output += content[1] + '\n';
+                    });
+                }
+                
+                // Variable extraction
+                const varMatches = code.match(/(\w+)\s*=\s*["']?([^"'\n]+)["']?/g);
+                if (varMatches && !output) {
+                    output = 'Variables created successfully.\n';
+                }
+            } else if (language === 'javascript') {
+                const logMatches = code.match(/console\.log\s*\(\s*["']([^"']+)["']\s*\)/g);
+                if (logMatches) {
+                    logMatches.forEach(match => {
+                        const content = match.match(/console\.log\s*\(\s*["']([^"']+)["']\s*\)/);
+                        if (content) output += content[1] + '\n';
+                    });
+                }
+                
+                if (!output && (code.includes('let ') || code.includes('const '))) {
+                    output = 'Variables created successfully.\n';
+                }
+            } else if (language === 'java') {
+                const printMatches = code.match(/System\.out\.println\s*\(\s*["']([^"']+)["']\s*\)/g);
+                if (printMatches) {
+                    printMatches.forEach(match => {
+                        const content = match.match(/System\.out\.println\s*\(\s*["']([^"']+)["']\s*\)/);
+                        if (content) output += content[1] + '\n';
+                    });
+                }
+                
+                if (!output && (code.includes('String ') || code.includes('int '))) {
+                    output = 'Variables declared successfully.\n';
+                }
+            }
+            
+            return output || 'Code executed successfully. (No output)';
+        }
+
+        function checkForErrors(code, language) {
+            const lines = code.split('\n');
+            
+            // Check for common syntax errors - find the specific line
+            let parenCount = 0;
+            let braceCount = 0;
+            let bracketCount = 0;
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                const lineNum = i + 1;
+                
+                // Count parentheses
+                for (const char of line) {
+                    if (char === '(') parenCount++;
+                    if (char === ')') parenCount--;
+                    if (char === '{') braceCount++;
+                    if (char === '}') braceCount--;
+                    if (char === '[') bracketCount++;
+                    if (char === ']') bracketCount--;
+                }
+                
+                // Check for negative counts (closing without opening)
+                if (parenCount < 0) {
+                    return { message: `SyntaxError: Unexpected ')' - no matching '('`, line: lineNum };
+                }
+                if (braceCount < 0) {
+                    return { message: `SyntaxError: Unexpected '}' - no matching '{'`, line: lineNum };
+                }
+                if (bracketCount < 0) {
+                    return { message: `SyntaxError: Unexpected ']' - no matching '['`, line: lineNum };
+                }
+                
+                // Python-specific: Check for missing colons
+                if (language === 'python') {
+                    if (line.match(/^\s*(if|elif|else|for|while|def|class|try|except|finally|with)\b/) && !line.trim().endsWith(':')) {
+                        return { message: `SyntaxError: Missing ':' at end of statement`, line: lineNum };
+                    }
+                }
+                
+                // Check for unclosed strings on a line
+                const singleQuotes = (line.match(/'/g) || []).length;
+                const doubleQuotes = (line.match(/"/g) || []).length;
+                if (singleQuotes % 2 !== 0 && !line.includes("\\'")) {
+                    return { message: `SyntaxError: Unclosed string literal`, line: lineNum };
+                }
+                if (doubleQuotes % 2 !== 0 && !line.includes('\\"')) {
+                    return { message: `SyntaxError: Unclosed string literal`, line: lineNum };
+                }
+            }
+            
+            // Check for unclosed at end of file
+            if (parenCount > 0) {
+                return { message: `SyntaxError: Missing ')' - unclosed parenthesis`, line: lines.length };
+            }
+            if (braceCount > 0) {
+                return { message: `SyntaxError: Missing '}' - unclosed brace`, line: lines.length };
+            }
+            if (bracketCount > 0) {
+                return { message: `SyntaxError: Missing ']' - unclosed bracket`, line: lines.length };
+            }
+            
+            return null;
+        }
+
+        function submitCode() {
+            const code = AppState.editor.getValue();
+            const lesson = curriculum[AppState.currentLanguage].lessons[AppState.currentLessonIndex];
+            
+            clearErrorDecorations();
+            
+            // Check for errors first
+            const errorInfo = checkForErrors(code, AppState.currentLanguage);
+            if (errorInfo) {
+                document.getElementById('output-content').innerHTML = `<span class="text-red-400">❌ ${escapeHtml(errorInfo.message)}</span>`;
+                if (errorInfo.line) {
+                    highlightErrorLine(errorInfo.line);
+                }
+                return;
+            }
+            
+            // Check if solution matches
+            if (lesson.solution.test(code)) {
+                // Mark as complete
+                const progress = AppState.progress[AppState.currentLanguage];
+                if (!progress.completed.includes(lesson.id)) {
+                    progress.completed.push(lesson.id);
+                }
+                
+                // Unlock next lesson
+                if (AppState.currentLessonIndex >= progress.current) {
+                    progress.current = Math.min(
+                        AppState.currentLessonIndex + 1,
+                        curriculum[AppState.currentLanguage].lessons.length - 1
+                    );
+                }
+                
+                saveProgress();
+                
+                // Show success
+                document.getElementById('output-content').innerHTML = '<span class="text-green-400">✅ Correct! Great job!</span>';
+                
+                // Show toast
+                showToast('Lesson completed! Next lesson unlocked.');
+                
+                // Update UI
+                renderLessonsList();
+                updateProgressDisplay();
+                
+                // Auto-advance after delay
+                setTimeout(() => {
+                    if (AppState.currentLessonIndex < curriculum[AppState.currentLanguage].lessons.length - 1) {
+                        AppState.currentLessonIndex++;
+                        renderLessonsList();
+                        loadLesson();
+                    }
+                }, 1500);
+            } else {
+                document.getElementById('output-content').innerHTML = '<span class="text-yellow-400">⚠️ Not quite right. Check the task requirements and try again.</span>';
+            }
+        }
+
+        // ============================================
+        // PROJECTS FUNCTIONALITY
+        // ============================================
+        function showNewProjectModal() {
+            document.getElementById('new-project-modal').classList.remove('hidden');
+        }
+
+        function hideNewProjectModal() {
+            document.getElementById('new-project-modal').classList.add('hidden');
+        }
+
+        function createProject() {
+            const name = document.getElementById('project-name-input').value.trim();
+            const lang = document.getElementById('project-lang-select').value;
+            
+            if (!name) {
+                alert('Please enter a project name');
+                return;
+            }
+            
+            const extension = { python: 'py', javascript: 'js', java: 'java' }[lang];
+            const mainFile = lang === 'java' ? 'Main.java' : `main.${extension}`;
+            
+            const project = {
+                id: Date.now(),
+                name: name,
+                language: lang,
+                files: [
+                    {
+                        name: mainFile,
+                        content: getDefaultFileContent(lang, mainFile)
+                    }
+                ]
+            };
+            
+            AppState.projects.push(project);
+            AppState.currentProject = project;
+            saveProgress();
+            
+            hideNewProjectModal();
+            renderFileTree();
+            openFile(project.files[0]);
+        }
+
+        function getDefaultFileContent(lang, filename) {
+            const templates = {
+                python: `# ${filename}\n# Your Python code here\n\ndef main():\n    print("Hello, World!")\n\nif __name__ == "__main__":\n    main()\n`,
+                javascript: `// ${filename}\n// Your JavaScript code here\n\nfunction main() {\n    console.log("Hello, World!");\n}\n\nmain();\n`,
+                java: `// ${filename}\n// Your Java code here\n\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}\n`
+            };
+            return templates[lang] || '// New file\n';
+        }
+
+        function renderFileTree() {
+            const container = document.getElementById('file-tree');
+            
+            if (!AppState.currentProject) {
+                container.innerHTML = '<div class="text-sm text-gray-500 text-center py-8">No project open.<br>Create a new project to get started.</div>';
+                return;
+            }
+            
+            const project = AppState.currentProject;
+            
+            container.innerHTML = `
+                <div class="mb-2">
+                    <div class="flex items-center gap-2 px-2 py-1 font-medium text-sm">
+                        <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/>
+                        </svg>
+                        ${project.name}
+                    </div>
+                    <div class="ml-4 space-y-1">
+                        ${project.files.map(file => `
+                            <div class="file-tree-item flex items-center gap-2 px-2 py-1 rounded cursor-pointer text-sm ${AppState.currentFile?.name === file.name ? 'active' : ''}" data-file="${file.name}">
+                                <svg class="w-4 h-4 ${getFileIconColor(file.name)}" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/>
+                                </svg>
+                                ${file.name}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Add click handlers
+            container.querySelectorAll('.file-tree-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const fileName = item.dataset.file;
+                    const file = project.files.find(f => f.name === fileName);
+                    if (file) openFile(file);
+                });
+            });
+        }
+
+        function getFileIconColor(filename) {
+            if (filename.endsWith('.py')) return 'text-blue-400';
+            if (filename.endsWith('.js')) return 'text-yellow-400';
+            if (filename.endsWith('.java')) return 'text-orange-400';
+            return 'text-gray-400';
+        }
+
+        function openFile(file) {
+            AppState.currentFile = file;
+            
+            const editorContainer = document.getElementById('project-editor');
+            const tabsContainer = document.getElementById('project-tabs');
+            
+            // Update tabs
+            tabsContainer.innerHTML = `
+                <div class="flex items-center gap-2 px-3 py-1.5 rounded-t bg-gray-800 border-t border-l border-r border-gray-700">
+                    <svg class="w-4 h-4 ${getFileIconColor(file.name)}" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/>
+                    </svg>
+                    <span class="text-sm">${file.name}</span>
+                    <button class="ml-2 hover:bg-gray-600 rounded p-0.5" onclick="closeFile()">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            `;
+            
+            // Initialize project editor if needed
+            if (!AppState.projectEditor) {
+                editorContainer.innerHTML = '<div id="project-monaco" style="width: 100%; height: 100%;"></div>';
+                
+                require(['vs/editor/editor.main'], function () {
+                    AppState.projectEditor = monaco.editor.create(document.getElementById('project-monaco'), {
+                        value: file.content,
+                        language: getMonacoLanguage(AppState.currentProject.language),
+                        theme: AppState.theme === 'dark' ? 'vs-dark' : 'vs',
+                        fontSize: 14,
+                        fontFamily: "'JetBrains Mono', monospace",
+                        minimap: { enabled: true },
+                        lineNumbers: 'on',
+                        scrollBeyondLastLine: false,
+                        automaticLayout: true,
+                        tabSize: 4,
+                        insertSpaces: true,
+                        wordWrap: 'on',
+                        padding: { top: 16, bottom: 16 }
+                    });
+                    
+                    // Auto-save on change
+                    AppState.projectEditor.onDidChangeModelContent(() => {
+                        if (AppState.currentFile) {
+                            AppState.currentFile.content = AppState.projectEditor.getValue();
+                            saveProgress();
+                        }
+                    });
+                });
+            } else {
+                AppState.projectEditor.setValue(file.content);
+                monaco.editor.setModelLanguage(
+                    AppState.projectEditor.getModel(),
+                    getMonacoLanguage(AppState.currentProject.language)
+                );
+            }
+            
+            renderFileTree();
+        }
+
+        function closeFile() {
+            AppState.currentFile = null;
+            document.getElementById('project-tabs').innerHTML = '<div class="text-sm text-gray-500 px-4 py-2">No files open</div>';
+            document.getElementById('project-editor').innerHTML = `
+                <div class="flex items-center justify-center h-full">
+                    <div class="text-center">
+                        <svg class="w-16 h-16 mx-auto text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <p class="text-gray-500">Select a file to start editing</p>
+                    </div>
+                </div>
+            `;
+            AppState.projectEditor = null;
+            renderFileTree();
+        }
+
+        function addNewFile() {
+            if (!AppState.currentProject) {
+                showNewProjectModal();
+                return;
+            }
+            
+            const extension = { python: 'py', javascript: 'js', java: 'java' }[AppState.currentProject.language];
+            const name = prompt('Enter file name:', `new_file.${extension}`);
+            
+            if (name) {
+                const newFile = {
+                    name: name,
+                    content: getDefaultFileContent(AppState.currentProject.language, name)
+                };
+                AppState.currentProject.files.push(newFile);
+                saveProgress();
+                renderFileTree();
+                openFile(newFile);
+            }
+        }
+
+        // ============================================
+        // PROGRESS DISPLAY
+        // ============================================
+        function updateProgressDisplay() {
+            ['python', 'javascript', 'java'].forEach(lang => {
+                const total = curriculum[lang].lessons.length;
+                const completed = AppState.progress[lang].completed.length;
+                const percentage = (completed / total) * 100;
+                
+                document.getElementById(`${lang}-lessons-count`).textContent = `${completed}/${total} Lessons`;
+                document.getElementById(`${lang}-progress-bar`).style.width = `${percentage}%`;
+            });
+        }
+
+        // ============================================
+        // HINTS FUNCTIONALITY
+        // ============================================
+        function showHints() {
+            const lesson = curriculum[AppState.currentLanguage].lessons[AppState.currentLessonIndex];
+            const code = AppState.editor ? AppState.editor.getValue() : '';
+            const hintsContainer = document.getElementById('hints-content');
+            
+            // Check for errors first
+            const errorInfo = checkForErrors(code, AppState.currentLanguage);
+            
+            let hintsHtml = '';
+            
+            // If there's an error, show error-specific hint first
+            if (errorInfo) {
+                hintsHtml += `
+                    <div class="bg-red-900/30 border border-red-700 rounded-lg p-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-red-600 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-red-400 mb-1">Error Detected</h4>
+                                <p class="text-sm text-gray-300">${escapeHtml(errorInfo.message)}</p>
+                                <p class="text-xs text-gray-400 mt-1">Line ${errorInfo.line}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Show lesson hints
+            hintsHtml += '<p class="text-sm text-gray-400 mt-2 mb-2">Tips for this lesson:</p>';
+            
+            lesson.hints.forEach((hint, index) => {
+                hintsHtml += `
+                    <div class="bg-gray-700/50 border border-gray-600 rounded-lg p-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 rounded-full bg-yellow-600 flex items-center justify-center flex-shrink-0 text-sm font-bold">
+                                ${index + 1}
+                            </div>
+                            <p class="text-sm text-gray-200">${escapeHtml(hint)}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            hintsContainer.innerHTML = hintsHtml;
+            document.getElementById('hints-modal').classList.remove('hidden');
+        }
+
+        function hideHints() {
+            document.getElementById('hints-modal').classList.add('hidden');
+        }
+        
+        // ============================================
+        // SHARE & COPY FUNCTIONALITY
+        // ============================================
+        function getLessonShareUrl() {
+            const lesson = curriculum[AppState.currentLanguage].lessons[AppState.currentLessonIndex];
+            const baseUrl = 'https://mildstackon.github.io/tricode/';
+            return `${baseUrl}?lang=${AppState.currentLanguage}&lesson=${AppState.currentLessonIndex}`;
+        }
+        
+        function showShareModal() {
+            const lesson = curriculum[AppState.currentLanguage].lessons[AppState.currentLessonIndex];
+            const langName = curriculum[AppState.currentLanguage].name;
+            
+            document.getElementById('share-lesson-title').textContent = `${lesson.title} - ${langName}`;
+            document.getElementById('share-url-input').value = getLessonShareUrl();
+            document.getElementById('share-modal').classList.remove('hidden');
+        }
+        
+        function hideShareModal() {
+            document.getElementById('share-modal').classList.add('hidden');
+        }
+        
+        async function shareLesson() {
+            const lesson = curriculum[AppState.currentLanguage].lessons[AppState.currentLessonIndex];
+            const langName = curriculum[AppState.currentLanguage].name;
+            const shareData = {
+                title: `TriCode - ${lesson.title}`,
+                text: `I'm learning ${langName} on TriCode! Check out this lesson: ${lesson.title}`,
+                url: getLessonShareUrl()
+            };
+            
+            // Try native share first
+            if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+                try {
+                    await navigator.share(shareData);
+                    showNotification('Shared successfully!');
+                } catch (err) {
+                    if (err.name !== 'AbortError') {
+                        showShareModal();
+                    }
+                }
+            } else {
+                showShareModal();
+            }
+        }
+        
+        function shareToTwitter() {
+            const lesson = curriculum[AppState.currentLanguage].lessons[AppState.currentLessonIndex];
+            const langName = curriculum[AppState.currentLanguage].name;
+            const text = encodeURIComponent(`I'm learning ${langName} on TriCode! 🚀 Check out this lesson: ${lesson.title}`);
+            const url = encodeURIComponent(getLessonShareUrl());
+            window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank', 'width=550,height=420');
+            hideShareModal();
+        }
+        
+        function shareToLinkedIn() {
+            const url = encodeURIComponent(getLessonShareUrl());
+            window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank', 'width=550,height=420');
+            hideShareModal();
+        }
+        
+        function shareToFacebook() {
+            const url = encodeURIComponent(getLessonShareUrl());
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=550,height=420');
+            hideShareModal();
+        }
+        
+        function shareToWhatsApp() {
+            const lesson = curriculum[AppState.currentLanguage].lessons[AppState.currentLessonIndex];
+            const langName = curriculum[AppState.currentLanguage].name;
+            const text = encodeURIComponent(`I'm learning ${langName} on TriCode! 🚀 Check out this lesson: ${lesson.title}\n\n${getLessonShareUrl()}`);
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+            hideShareModal();
+        }
+        
+        function shareToReddit() {
+            const lesson = curriculum[AppState.currentLanguage].lessons[AppState.currentLessonIndex];
+            const langName = curriculum[AppState.currentLanguage].name;
+            const title = encodeURIComponent(`Learning ${langName} on TriCode - ${lesson.title}`);
+            const url = encodeURIComponent(getLessonShareUrl());
+            window.open(`https://www.reddit.com/submit?url=${url}&title=${title}`, '_blank', 'width=550,height=420');
+            hideShareModal();
+        }
+        
+        function shareViaEmail() {
+            const lesson = curriculum[AppState.currentLanguage].lessons[AppState.currentLessonIndex];
+            const langName = curriculum[AppState.currentLanguage].name;
+            const subject = encodeURIComponent(`Check out this ${langName} lesson on TriCode!`);
+            const body = encodeURIComponent(`Hey!\n\nI'm learning ${langName} on TriCode and thought you might like this lesson: ${lesson.title}\n\nCheck it out: ${getLessonShareUrl()}\n\nTriCode is a free interactive platform to learn Python, Java, and JavaScript.`);
+            window.location.href = `mailto:?subject=${subject}&body=${body}`;
+            hideShareModal();
+        }
+        
+        async function copyShareText() {
+            const lesson = curriculum[AppState.currentLanguage].lessons[AppState.currentLessonIndex];
+            const langName = curriculum[AppState.currentLanguage].name;
+            const shareText = `🚀 Learning ${langName} on TriCode!\n\n📚 Lesson: ${lesson.title}\n\n🔗 ${getLessonShareUrl()}\n\n#coding #programming #${langName.toLowerCase()} #learntocode #tricode`;
+            
+            try {
+                await navigator.clipboard.writeText(shareText);
+                showNotification('Caption + link copied! Paste it on TikTok, YouTube, or anywhere!');
+                hideShareModal();
+            } catch (err) {
+                const textarea = document.createElement('textarea');
+                textarea.value = shareText;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showNotification('Caption + link copied! Paste it on TikTok, YouTube, or anywhere!');
+                hideShareModal();
+            }
+        }
+        
+        async function copyLessonLink() {
+            const url = getLessonShareUrl();
+            try {
+                await navigator.clipboard.writeText(url);
+                showNotification('Link copied to clipboard!');
+                
+                // Visual feedback on button
+                const btn = document.getElementById('copy-link-btn');
+                btn.classList.add('copied');
+                setTimeout(() => btn.classList.remove('copied'), 2000);
+            } catch (err) {
+                // Fallback for older browsers
+                const input = document.createElement('input');
+                input.value = url;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                showNotification('Link copied to clipboard!');
+            }
+        }
+        
+        async function copyShareUrl() {
+            const url = document.getElementById('share-url-input').value;
+            try {
+                await navigator.clipboard.writeText(url);
+                showNotification('Link copied to clipboard!');
+            } catch (err) {
+                document.getElementById('share-url-input').select();
+                document.execCommand('copy');
+                showNotification('Link copied to clipboard!');
+            }
+        }
+        
+        function showNotification(message) {
+            // Remove any existing notifications
+            const existing = document.querySelector('.copy-notification');
+            if (existing) existing.remove();
+            
+            const notification = document.createElement('div');
+            notification.className = 'copy-notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 2000);
+        }
+        
+        // ============================================
+        // LESSON NAVIGATION
+        // ============================================
+        function goToPreviousLesson() {
+            if (AppState.currentLessonIndex > 0) {
+                AppState.currentLessonIndex--;
+                renderLessonsList();
+                loadLesson();
+                updateLessonNavButtons();
+            }
+        }
+        
+        function goToNextLesson() {
+            const progress = AppState.progress[AppState.currentLanguage];
+            const maxIndex = curriculum[AppState.currentLanguage].lessons.length - 1;
+            
+            if (AppState.currentLessonIndex < maxIndex && AppState.currentLessonIndex < progress.current) {
+                AppState.currentLessonIndex++;
+                renderLessonsList();
+                loadLesson();
+                updateLessonNavButtons();
+            }
+        }
+        
+        function updateLessonNavButtons() {
+            const prevBtn = document.getElementById('prev-lesson-btn');
+            const nextBtn = document.getElementById('next-lesson-btn');
+            const progress = AppState.progress[AppState.currentLanguage];
+            const maxIndex = curriculum[AppState.currentLanguage].lessons.length - 1;
+            
+            // Previous button
+            prevBtn.disabled = AppState.currentLessonIndex === 0;
+            
+            // Next button - only enable if unlocked
+            nextBtn.disabled = AppState.currentLessonIndex >= maxIndex || AppState.currentLessonIndex >= progress.current;
+            
+            // Update mark complete button
+            updateMarkCompleteButton();
+        }
+        
+        function updateMarkCompleteButton() {
+            const btn = document.getElementById('mark-complete-btn');
+            const textSpan = document.getElementById('complete-btn-text');
+            const lesson = curriculum[AppState.currentLanguage].lessons[AppState.currentLessonIndex];
+            const progress = AppState.progress[AppState.currentLanguage];
+            const isCompleted = progress.completed.includes(lesson.id);
+            
+            if (isCompleted) {
+                btn.classList.add('completed');
+                textSpan.textContent = 'Completed';
+            } else {
+                btn.classList.remove('completed');
+                textSpan.textContent = 'Mark Complete';
+            }
+        }
+        
+        function toggleMarkComplete() {
+            const lesson = curriculum[AppState.currentLanguage].lessons[AppState.currentLessonIndex];
+            const progress = AppState.progress[AppState.currentLanguage];
+            const isCompleted = progress.completed.includes(lesson.id);
+            
+            if (isCompleted) {
+                // Remove from completed
+                progress.completed = progress.completed.filter(id => id !== lesson.id);
+                showNotification('Lesson unmarked');
+            } else {
+                // Add to completed
+                progress.completed.push(lesson.id);
+                
+                // Unlock next lesson if needed
+                if (AppState.currentLessonIndex >= progress.current) {
+                    progress.current = Math.min(
+                        AppState.currentLessonIndex + 1,
+                        curriculum[AppState.currentLanguage].lessons.length - 1
+                    );
+                }
+                showNotification('Lesson marked as complete!');
+            }
+            
+            saveProgress();
+            renderLessonsList();
+            updateMarkCompleteButton();
+            updateProgressDisplay();
+            updateLessonNavButtons();
+        }
+        
+        // ============================================
+        // QUIZ COMPONENT
+        // ============================================
+        // Usage: Add this HTML anywhere in a lesson:
+        // <div class="quiz" data-question="What is 2+2?" data-options="3,4,5,6" data-correct="1"></div>
+        // data-correct is 0-indexed (1 means "4" is correct)
+        
+        function initQuizzes() {
+            document.querySelectorAll('.quiz:not(.initialized)').forEach(quiz => {
+                const question = quiz.dataset.question;
+                const options = quiz.dataset.options.split(',');
+                const correctIndex = parseInt(quiz.dataset.correct);
+                
+                quiz.classList.add('initialized', 'quiz-container', 'theme-transition', 'bg-gray-800', 'border', 'border-gray-700', 'p-4', 'my-4');
+                
+                let html = `
+                    <h4 class="font-semibold mb-3 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Quiz: ${escapeHtml(question)}
+                    </h4>
+                    <div class="space-y-2">
+                `;
+                
+                options.forEach((option, index) => {
+                    html += `
+                        <button class="quiz-option w-full text-left p-3 rounded-lg border border-gray-600 hover:border-blue-500 transition-all" data-index="${index}" data-correct="${index === correctIndex}">
+                            <span class="font-medium mr-2">${String.fromCharCode(65 + index)}.</span>
+                            ${escapeHtml(option.trim())}
+                        </button>
+                    `;
+                });
+                
+                html += `
+                    </div>
+                    <div class="quiz-feedback mt-3 hidden"></div>
+                `;
+                
+                quiz.innerHTML = html;
+                
+                // Add click handlers
+                quiz.querySelectorAll('.quiz-option').forEach(option => {
+                    option.addEventListener('click', () => handleQuizAnswer(quiz, option));
+                });
+            });
+        }
+        
+        function handleQuizAnswer(quiz, selectedOption) {
+            const options = quiz.querySelectorAll('.quiz-option');
+            const feedback = quiz.querySelector('.quiz-feedback');
+            const isCorrect = selectedOption.dataset.correct === 'true';
+            
+            // Disable all options
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.dataset.correct === 'true') {
+                    opt.classList.add('correct');
+                }
+            });
+            
+            if (isCorrect) {
+                selectedOption.classList.add('correct');
+                feedback.innerHTML = `
+                    <div class="flex items-center gap-2 text-green-400">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Correct! Well done!
+                    </div>
+                `;
+            } else {
+                selectedOption.classList.add('incorrect');
+                feedback.innerHTML = `
+                    <div class="flex items-center gap-2 text-red-400">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Not quite. The correct answer is highlighted in green.
+                    </div>
+                `;
+            }
+            
+            feedback.classList.remove('hidden');
+        }
+        
+        // ============================================
+        // COPY CODE FUNCTIONALITY
+        // ============================================
+        function addCopyCodeButtons() {
+            document.querySelectorAll('pre code:not(.copy-initialized)').forEach(codeBlock => {
+                codeBlock.classList.add('copy-initialized');
+                
+                const pre = codeBlock.parentElement;
+                pre.style.position = 'relative';
+                
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'copy-code-btn absolute top-2 right-2 px-2 py-1 text-xs bg-gray-600 hover:bg-gray-500 rounded transition-all opacity-0 group-hover:opacity-100';
+                copyBtn.innerHTML = `
+                    <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+                    </svg>
+                    Copy
+                `;
+                copyBtn.style.opacity = '0.7';
+                
+                pre.classList.add('group');
+                pre.appendChild(copyBtn);
+                
+                // Show on hover
+                pre.addEventListener('mouseenter', () => copyBtn.style.opacity = '1');
+                pre.addEventListener('mouseleave', () => copyBtn.style.opacity = '0.7');
+                
+                copyBtn.addEventListener('click', async () => {
+                    const code = codeBlock.textContent;
+                    try {
+                        await navigator.clipboard.writeText(code);
+                        copyBtn.innerHTML = `
+                            <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Copied!
+                        `;
+                        copyBtn.classList.add('bg-green-600');
+                        
+                        setTimeout(() => {
+                            copyBtn.innerHTML = `
+                                <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
+                                </svg>
+                                Copy
+                            `;
+                            copyBtn.classList.remove('bg-green-600');
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Failed to copy:', err);
+                    }
+                });
+            });
+        }
+        
+        // ============================================
+        // URL PARAMETER HANDLING (Deep Linking)
+        // ============================================
+        function handleUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            const lang = params.get('lang');
+            const lessonIndex = params.get('lesson');
+            
+            if (lang && curriculum[lang]) {
+                AppState.currentLanguage = lang;
+                
+                // Update language buttons
+                document.querySelectorAll('.language-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.lang === lang) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+            
+            if (lessonIndex !== null) {
+                const index = parseInt(lessonIndex);
+                const progress = AppState.progress[AppState.currentLanguage];
+                
+                // Only allow if lesson is unlocked
+                if (index >= 0 && index <= progress.current) {
+                    AppState.currentLessonIndex = index;
+                }
+            }
+        }
+        
+        // ============================================
+        // UTILITIES
+        // ============================================
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('success-toast');
+            document.getElementById('toast-message').textContent = message;
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // ============================================
+        // EVENT LISTENERS
+        // ============================================
+        document.addEventListener('DOMContentLoaded', () => {
+            // Handle URL parameters first (for deep linking)
+            handleUrlParams();
+            
+            // Initialize
+            loadProgress();
+            applyTheme();
+            initMonacoEditor();
+            
+            // Theme toggle
+            document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+            
+            // Navigation tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+            });
+            
+            // Language buttons
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.addEventListener('click', () => switchLanguage(btn.dataset.lang));
+            });
+            
+            // Run and Submit buttons
+            document.getElementById('run-code-btn').addEventListener('click', runCode);
+            document.getElementById('submit-btn').addEventListener('click', submitCode);
+            
+            // Hints button
+            document.getElementById('hints-btn').addEventListener('click', showHints);
+            document.getElementById('close-hints-btn').addEventListener('click', hideHints);
+            document.getElementById('close-hints-btn-bottom').addEventListener('click', hideHints);
+            document.getElementById('hints-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'hints-modal') hideHints();
+            });
+            
+            // Lesson navigation
+            document.getElementById('prev-lesson-btn').addEventListener('click', goToPreviousLesson);
+            document.getElementById('next-lesson-btn').addEventListener('click', goToNextLesson);
+            
+            // Share functionality
+            document.getElementById('share-btn').addEventListener('click', shareLesson);
+            document.getElementById('copy-link-btn').addEventListener('click', copyLessonLink);
+            document.getElementById('close-share-btn').addEventListener('click', hideShareModal);
+            document.getElementById('copy-share-url').addEventListener('click', copyShareUrl);
+            document.getElementById('share-twitter').addEventListener('click', shareToTwitter);
+            document.getElementById('share-linkedin').addEventListener('click', shareToLinkedIn);
+            document.getElementById('share-facebook').addEventListener('click', shareToFacebook);
+            document.getElementById('share-whatsapp').addEventListener('click', shareToWhatsApp);
+            document.getElementById('share-reddit').addEventListener('click', shareToReddit);
+            document.getElementById('share-email').addEventListener('click', shareViaEmail);
+            document.getElementById('copy-share-text').addEventListener('click', copyShareText);
+            document.getElementById('share-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'share-modal') hideShareModal();
+            });
+            
+            // Mark complete button
+            document.getElementById('mark-complete-btn').addEventListener('click', toggleMarkComplete);
+            
+            // Clear output
+            document.getElementById('clear-output').addEventListener('click', () => {
+                document.getElementById('output-content').innerHTML = '<span class="text-gray-500">// Run your code to see output here</span>';
+            });
+            
+            // Project modal
+            document.getElementById('new-project-btn').addEventListener('click', showNewProjectModal);
+            document.getElementById('cancel-project-btn').addEventListener('click', hideNewProjectModal);
+            document.getElementById('create-project-btn').addEventListener('click', createProject);
+            
+            // New file button
+            document.getElementById('new-file-btn').addEventListener('click', addNewFile);
+            
+            // Close modal on background click
+            document.getElementById('new-project-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'new-project-modal') hideNewProjectModal();
+            });
+            
+            // Initialize quizzes and copy buttons
+            initQuizzes();
+            addCopyCodeButtons();
+            
+            // Update navigation buttons after load
+            setTimeout(() => {
+                updateLessonNavButtons();
+            }, 100);
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey || e.metaKey) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        runCode();
+                    } else if (e.key === 's') {
+                        e.preventDefault();
+                        submitCode();
+                    }
+                }
+                
+                // Arrow keys for lesson navigation (when not in editor)
+                if (document.activeElement.tagName !== 'TEXTAREA' && 
+                    document.activeElement.tagName !== 'INPUT' &&
+                    !document.activeElement.closest('#monaco-editor')) {
+                    if (e.key === 'ArrowLeft') {
+                        goToPreviousLesson();
+                    } else if (e.key === 'ArrowRight') {
+                        goToNextLesson();
+                    }
+                }
+            });
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (AppState.editor) AppState.editor.layout();
+            if (AppState.projectEditor) AppState.projectEditor.layout();
+        });
+    </script>
+</body>
+</html>
